@@ -25,8 +25,17 @@
         
         <main class="content">
             <header>
-                <span th:text="${#authentication != null} ? ${#authentication.name} : 'Guest'"></span>
-                <p>This is your dashboard where you can track your placement preparation progress.</p>
+                <div class="bg-white shadow-md rounded-xl p-6 mb-6 text-center">
+                    <h2 class="text-2xl font-semibold mb-2">
+                        Welcome, 
+                        <span th:if="${loggedInUser != null}" th:text="${loggedInUser.username}" class="text-blue-600"></span>
+                        <span th:if="${loggedInUser == null}" class="text-gray-500">Guest</span>!
+                    </h2>
+                    <p class="text-gray-700">
+                        This is your dashboard where you can track your placement preparation progress.
+                    </p>
+                </div>
+                
             </header>
             
             <section class="stats-overview">
