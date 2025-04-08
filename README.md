@@ -119,3 +119,52 @@ UPDATE users_roles SET role = 'ROLE_ADMIN' WHERE user_id = 1;
 - `dto/` - Data Transfer Objects for form handling
 - `resources/templates/` - Thymeleaf HTML templates
 - `resources/static/` - Static resources (CSS, JS)
+
+  coding-tracker/
+├── src/
+│   ├── main/
+│   │   ├── java/
+│   │   │   └── com/
+│   │   │       └── placementtracker/
+│   │   │           ├── PlacementTrackerApplication.java
+│   │   │           ├── config/
+│   │   │           │   ├── SecurityConfig.java
+│   │   │           │   └── EmailConfig.java
+│   │   │           ├── controller/
+│   │   │           │   ├── AuthController.java
+│   │   │           │   └── RegistrationController.java
+│   │   │           ├── model/
+│   │   │           │   ├── User.java
+│   │   │           │   └── VerificationToken.java
+│   │   │           ├── repository/
+│   │   │           │   ├── UserRepository.java
+│   │   │           │   └── VerificationTokenRepository.java
+│   │   │           ├── service/
+│   │   │           │   ├── UserService.java
+│   │   │           │   ├── UserServiceImpl.java
+│   │   │           │   ├── EmailService.java
+│   │   │           │   └── EmailServiceImpl.java
+│   │   │           └── dto/
+│   │   │               ├── UserRegistrationDto.java
+│   │   │               └── LoginDto.java
+│   │   └── resources/
+│   │       ├── application.properties
+│   │       ├── static/
+│   │       │   ├── css/
+│   │       │   │   └── styles.css
+│   │       │   └── js/
+│   │       │       └── scripts.js
+│   │       └── templates/
+│   │           ├── login.html
+│   │           ├── register.html
+│   │           ├── verification-success.html
+│   │           └── verification-failure.html
+│   └── test/
+│       └── java/
+│           └── com/
+│               └── placementtracker/
+│                   └── auth/
+│                       ├── UserServiceTest.java
+│                       └── AuthControllerTest.java
+├── pom.xml
+└── README.md
