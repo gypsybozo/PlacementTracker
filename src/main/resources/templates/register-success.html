@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Registration Success - Coding Placement Tracker</title>
+    <link rel="stylesheet" th:href="@{/css/styles.css}">
+</head>
+<body>
+    <div class="container">
+        <div class="message-box success">
+            <h1>Registration Successful!</h1>
+            <p th:text="${message}">Please check your email to verify your account.</p>
+            <div class="action-links">
+                <a th:href="@{/login}" class="btn btn-primary">Go to Login</a>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

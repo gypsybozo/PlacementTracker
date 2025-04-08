@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Verification Failed - Coding Placement Tracker</title>
+    <link rel="stylesheet" th:href="@{/css/styles.css}">
+</head>
+<body>
+    <div class="container">
+        <div class="message-box error">
+            <h1>Email Verification Failed</h1>
+            <p th:text="${error}">The verification link is invalid or has expired.</p>
+            <div class="action-links">
+                <a th:href="@{/login}" class="btn btn-secondary">Back to Login</a>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
