@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Add Progress - Placement Tracker</title>
+    <link rel="stylesheet" th:href="@{/css/styles.css}">
+</head>
+<body>
+    <div class="dashboard-container">
+        <nav class="sidebar">
+            <div class="logo">
+                <h2>Coding Tracker</h2>
+            </div>
+            <ul class="nav-links">
+                <li><a th:href="@{/dashboard}"><span class="icon">📊</span> Dashboard</a></li>
+                <li class="active"><a th:href="@{/progress}"><span class="icon">📝</span> Progress</a></li>
+                <li><a href="#"><span class="icon">👥</span> Study Groups</a></li>
+                <li><a href="#"><span class="icon">🏢</span> Jobs</a></li>
+                <li><a href="#"><span class="icon">⚙️</span> Settings</a></li>
+            </ul>
+            <div class="logout">
+                <a th:href="@{/logout}"><span class="icon">🚪</span> Logout</a>
+            </div>
+        </nav>
+        
+        <main class="content">
+            <header>
+                <h1>Add Solved Problem</h1>
+                <p>Record your coding progress by adding a solved problem.</p>
+            </header>
+            
+            <div th:if="${errorMessage}" class="alert alert-danger" th:text="${errorMessage}"></div>
+            
+            <div class="form-wrapper">
+                <form th:action="@{/progress/add}" th:object="${progressDto}" method="post">
+                    <div class="form-group">
+                        <label for="problemTitle">Problem Title</label>
+                        <input type="text" id="problemTitle" th:field="*{problemTitle}" class="form-control" required>
+                        <span th:if="${#fields.hasErrors('problemTitle')}" th:errors="*{problemTitle}" class="text-danger"></span>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="platform">Platform</label>
+                        <select id="platform" th:field="*{platform}" class="form-control" required>
+                            <option value="">Select Platform</option>
+                            <option value="LeetCode">LeetCode</option>
+                            <option value="HackerRank">HackerRank</option>
+                            <option value="CodeForces">CodeForces</option>
+                            <option value="GeeksForGeeks">GeeksForGeeks</option>
+                            <option value="InterviewBit">InterviewBit</option>
+                            <option value="Other">Other</option>
+                        </select>
+                        <span th:if="${#fields.hasErrors('platform')}" th:errors="*{platform}" class="text-danger"></span>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="difficultyLevel">Difficulty Level</label>
+                        <select id="difficultyLevel" th:field="*{difficultyLevel}" class="form-control" required>
+                            <option value="">Select Difficulty</option>
+                            <option value="EASY">Easy</option>
+                            <option value="MEDIUM">Medium</option>
+                            <option value="HARD">Hard</option>
+                        </select>
+                        <span th:if="${#fields.hasErrors('difficultyLevel')}" th:errors="*{difficultyLevel}" class="text-danger"></span>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="problemUrl">Problem URL (Optional)</label>
+                        <input type="url" id="problemUrl" th:field="*{problemUrl}" class="form-control">
+                        <span th:if="${#fields.hasErrors('problemUrl')}" th:errors="*{problemUrl}" class="text-danger"></span>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="solution">Your Solution (Optional)</label>
+                        <textarea id="solution" th:field="*{solution}" class="form-control" rows="5"></textarea>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="languageUsed">Language Used</label>
+                        <select id="languageUsed" th:field="*{languageUsed}" class="form-control">
+                            <option value="">Select Language</option>
+                            <option value="Java">Java</option>
+                            <option value="Python">Python</option>
+                            <option value="C++">C++</option>
+                            <option value="JavaScript">JavaScript</option>
+                            <option value="Go">Go</option>
+                            <option value="Other">Other</option>
+                        </select>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="timeTakenMinutes">Time Taken (minutes)</label>
+                        <input type="number" id="timeTakenMinutes" th:field="*{timeTakenMinutes}" class="form-control" min="1">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="notes">Notes (Optional)</label>
+                        <textarea id="notes" th:field="*{notes}" class="form-control" rows="3"></textarea>
+                    </div>
+                    
+                    <div class="form-group">
+                        <button type="submit" class="btn btn-primary">Save Progress</button>
+                        <a th:href="@{/progress}" class="btn btn-secondary">Cancel</a>
+                    </div>
+                </form>
+            </div>
+        </main>
+    </div>
+</body>
+</html>

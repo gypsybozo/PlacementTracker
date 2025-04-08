@@ -13,7 +13,7 @@
             </div>
             <ul class="nav-links">
                 <li class="active"><a href="#"><span class="icon">📊</span> Dashboard</a></li>
-                <li><a href="#"><span class="icon">📝</span> Progress</a></li>
+                <li><a th:href="@{/progress}"><span class="icon">📝</span> Progress</a></li>
                 <li><a href="#"><span class="icon">👥</span> Study Groups</a></li>
                 <li><a href="#"><span class="icon">🏢</span> Jobs</a></li>
                 <li><a href="#"><span class="icon">⚙️</span> Settings</a></li>
@@ -25,36 +25,41 @@
         
         <main class="content">
             <header>
-                <h1>Welcome, <span th:text="${#authentication.name}">User</span>!</h1>
+                <span th:text="${#authentication != null} ? ${#authentication.name} : 'Guest'"></span>
                 <p>This is your dashboard where you can track your placement preparation progress.</p>
             </header>
             
             <section class="stats-overview">
                 <div class="stat-card">
-                    <h3>Problems Solved</h3>
-                    <p class="stat-number">0</p>
+                    <h3>Total Solved</h3>
+                    <p class="stat-number" th:text="${totalProblems}">0</p>
                 </div>
                 
                 <div class="stat-card">
                     <h3>Current Streak</h3>
-                    <p class="stat-number">0 days</p>
+                    <p class="stat-number"><span th:text="${currentStreak}">0</span> days</p>
                 </div>
-                
+
                 <div class="stat-card">
-                    <h3>Study Groups</h3>
-                    <p class="stat-number">0</p>
+                    <h3>Easy</h3>
+                    <p class="stat-number" th:text="${easyProblems}">0</p>
                 </div>
-                
+
                 <div class="stat-card">
-                    <h3>Job Matches</h3>
-                    <p class="stat-number">0</p>
+                    <h3>Medium</h3>
+                    <p class="stat-number" th:text="${mediumProblems}">0</p>
+                </div>
+
+                <div class="stat-card">
+                    <h3>Hard</h3>
+                    <p class="stat-number" th:text="${hardProblems}">0</p>
                 </div>
             </section>
             
             <section class="quick-actions">
                 <h2>Quick Actions</h2>
                 <div class="action-buttons">
-                    <a href="#" class="btn btn-primary">Log Progress</a>
+                    <a th:href="@{/progress/add}" class="btn btn-primary">Log Progress</a>
                     <a href="#" class="btn btn-secondary">Join Group</a>
                     <a href="#" class="btn btn-secondary">Update Profile</a>
                 </div>
