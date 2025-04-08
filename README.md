@@ -120,7 +120,10 @@ UPDATE users_roles SET role = 'ROLE_ADMIN' WHERE user_id = 1;
 - `resources/templates/` - Thymeleaf HTML templates
 - `resources/static/` - Static resources (CSS, JS)
 
-  coding-tracker/
+## 📁 Project Structure
+
+```text
+coding-tracker/
 ├── src/
 │   ├── main/
 │   │   ├── java/
@@ -168,3 +171,4 @@ UPDATE users_roles SET role = 'ROLE_ADMIN' WHERE user_id = 1;
 │                       └── AuthControllerTest.java
 ├── pom.xml
 └── README.md
+
