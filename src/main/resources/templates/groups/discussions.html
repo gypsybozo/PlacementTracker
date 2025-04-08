@@ -1,0 +1,297 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Discussion Arena</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        :root {
+            --primary: #e45e35;
+            --primary-light: #f8f9fa;
+            --secondary: #6c757d;
+            --light: #f8f9fa;
+            --dark: #343a40;
+            --white: #ffffff;
+            --shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+            --radius: 8px;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        body {
+            background-color: #e1e5e9;
+            color: #333;
+            line-height: 1.6;
+            padding: 0;
+            margin: 0;
+        }
+        
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+            padding: 1.5rem;
+        }
+        
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1.5rem;
+        }
+        
+        .page-title-container {
+            flex: 1;
+        }
+        
+        .page-title {
+            color: #222;
+            font-size: 2rem;
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+        }
+        
+        .page-subtitle {
+            color: #666;
+            font-size: 1.1rem;
+            font-weight: normal;
+        }
+        
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            padding: 0.7rem 1.5rem;
+            background-color: var(--primary);
+            color: white;
+            border: none;
+            border-radius: var(--radius);
+            text-decoration: none;
+            font-weight: 500;
+            cursor: pointer;
+        }
+        
+        .btn-outline {
+            background-color: transparent;
+            color: var(--primary);
+            border: 1px solid var(--primary);
+        }
+        
+        .layout-header {
+            display: flex;
+            justify-content: flex-end;
+            margin-bottom: 1rem;
+        }
+
+        .new-post-btn {
+            background-color: #e45e35;
+            color: white;
+            padding: 0.7rem 1.5rem;
+            border-radius: 5px;
+            font-weight: 500;
+            text-decoration: none;
+            border: none;
+            cursor: pointer;
+        }
+
+        .discussion-card {
+            background-color: var(--white);
+            border-radius: var(--radius);
+            padding: 1.5rem;
+            margin-bottom: 1rem;
+            box-shadow: var(--shadow);
+        }
+        
+        .post-header {
+            display: flex;
+            align-items: center;
+            margin-bottom: 0.5rem;
+            font-size: 0.9rem;
+            color: #666;
+        }
+        
+        .dot-separator {
+            margin: 0 0.5rem;
+        }
+        
+        .avatar {
+            width: 28px;
+            height: 28px;
+            border-radius: 50%;
+            background-color: #4c6ef5;
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            margin-right: 0.5rem;
+        }
+        
+        .avatar.green {
+            background-color: #7ca35a;
+        }
+        
+        .avatar.magenta {
+            background-color: #c71b9b;
+        }
+        
+        .discussion-title {
+            font-size: 1.5rem;
+            font-weight: 600;
+            margin-bottom: 0.75rem;
+            color: #222;
+        }
+        
+        .discussion-content {
+            margin-bottom: 1.5rem;
+            line-height: 1.5;
+        }
+        
+        .action-btn {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            background: none;
+            border: none;
+            cursor: pointer;
+            color: #666;
+            font-size: 14px;
+            text-decoration: none;
+        }
+        
+        .action-btn:hover {
+            color: var(--primary);
+        }
+
+        /* Form styles */
+        .form-container {
+            background-color: var(--white);
+            border-radius: var(--radius);
+            padding: 1.5rem;
+            margin-bottom: 1.5rem;
+            box-shadow: var(--shadow);
+            display: none;
+        }
+        
+        .form-group {
+            margin-bottom: 1rem;
+        }
+        
+        .form-label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: 500;
+        }
+        
+        .form-control {
+            width: 100%;
+            padding: 0.75rem 1rem;
+            border: 1px solid #ddd;
+            border-radius: var(--radius);
+            font-size: 1rem;
+        }
+        
+        textarea.form-control {
+            min-height: 100px;
+            resize: vertical;
+        }
+        
+        .alert-success {
+            background-color: #d4edda;
+            color: #155724;
+            padding: 1rem;
+            border-radius: var(--radius);
+            margin-bottom: 1rem;
+        }
+        
+        .alert-danger {
+            background-color: #f8d7da;
+            color: #721c24;
+            padding: 1rem;
+            border-radius: var(--radius);
+            margin-bottom: 1rem;
+        }
+    </style>
+    <script>
+        function toggleForm() {
+            const form = document.getElementById('new-post-form');
+            if (form.style.display === 'none' || form.style.display === '') {
+                form.style.display = 'block';
+            } else {
+                form.style.display = 'none';
+            }
+        }
+    </script>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <div class="page-title-container">
+                <h1 class="page-title">Discussion Arena</h1>
+                <p class="page-subtitle">Join the conversation on your favorite topics</p>
+            </div>
+            <a th:href="@{/dashboard}" class="btn btn-outline">
+                <i class="fas fa-arrow-left"></i> Back to Dashboard
+            </a>
+        </div>
+
+        <div class="layout-header">
+            <button class="new-post-btn" onclick="toggleForm()">New Post</button>
+        </div>
+
+        <!-- New Post Form -->
+        <div id="new-post-form" class="form-container">
+            <form th:action="@{/groups/{groupId}/discussions(groupId=${group.id})}" method="post" th:object="${discussionDto}">
+                <div class="form-group">
+                    <label class="form-label" for="title">Title</label>
+                    <input type="text" class="form-control" th:field="*{title}" placeholder="Enter discussion title" required/>
+                </div>
+                <div class="form-group">
+                    <label class="form-label" for="content">Content</label>
+                    <textarea class="form-control" th:field="*{content}" rows="4" placeholder="What's on your mind?" required></textarea>
+                </div>
+                <input type="hidden" th:field="*{problemId}"/>
+                <button type="submit" class="btn">
+                    Post
+                </button>
+            </form>
+        </div>
+
+        <!-- Flash messages -->
+        <div th:if="${successMessage}" class="alert-success">
+            <span th:text="${successMessage}"></span>
+        </div>
+        <div th:if="${errorMessage}" class="alert-danger">
+            <span th:text="${errorMessage}"></span>
+        </div>
+
+        <!-- Discussions -->
+        <div th:each="discussion : ${discussions}" class="discussion-card">
+            <div class="post-header">
+                <div th:if="${discussionStat.index % 3 == 0}" class="avatar">T</div>
+                <div th:if="${discussionStat.index % 3 == 1}" class="avatar magenta">M</div>
+                <div th:if="${discussionStat.index % 3 == 2}" class="avatar green">W</div>
+                <span>Posted by <span th:text="${discussion.user.username}">TechEnthusiast</span></span>
+                <span class="dot-separator">•</span>
+                <span th:text="${#temporals.format(discussion.createdAt, 'MMM d, yyyy')}">Apr 7, 2025</span>
+            </div>
+            <a th:href="@{/groups/{groupId}/discussions/{discussionId}(groupId=${group.id}, discussionId=${discussion.id})}" class="action-btn">
+                <h3 class="discussion-title" th:text="${discussion.title}">What skills have you been working on lately?</h3>
+            </a>    
+            <p class="discussion-content" th:text="${discussion.content}">I've been learning React and TypeScript recently, and I'm curious what technologies everyone else has been exploring. What are you all working on these days? Any resources you'd recommend?</p>
+            <a th:href="@{/groups/{groupId}/discussions/{discussionId}(groupId=${group.id}, discussionId=${discussion.id})}" class="action-btn">
+                <i class="far fa-comment"></i> <span>Comments</span>
+            </a>
+        </div>
+
+        <div th:if="${discussions.isEmpty()}" class="discussion-card">
+            <p>No discussions yet. Start the conversation!</p>
+        </div>
+    </div>
+</body>
+</html>

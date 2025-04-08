@@ -1,0 +1,368 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Group View</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        :root {
+            --primary: #4c6ef5;
+            --primary-light: #e7ebff;
+            --secondary: #6c757d;
+            --success: #28a745;
+            --danger: #dc3545;
+            --light: #f8f9fa;
+            --dark: #343a40;
+            --white: #ffffff;
+            --shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            --radius: 8px;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        body {
+            background-color: #f5f7fb;
+            color: #333;
+            line-height: 1.6;
+            padding: 0;
+            margin: 0;
+        }
+        
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+        
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 2rem;
+            padding-bottom: 1rem;
+            border-bottom: 1px solid #eee;
+        }
+        
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.5rem 1rem;
+            background-color: var(--primary);
+            color: white;
+            border: none;
+            border-radius: var(--radius);
+            text-decoration: none;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+        
+        .btn:hover {
+            background-color: #3a56c5;
+            transform: translateY(-2px);
+            box-shadow: var(--shadow);
+        }
+        
+        .btn-outline {
+            background-color: transparent;
+            color: var(--primary);
+            border: 1px solid var(--primary);
+        }
+        
+        .btn-outline:hover {
+            background-color: var(--primary-light);
+        }
+        
+        .btn-danger {
+            background-color: var(--danger);
+        }
+        
+        .btn-danger:hover {
+            background-color: #c82333;
+        }
+        
+        .main-content {
+            display: grid;
+            grid-template-columns: 2fr 1fr;
+            gap: 2rem;
+        }
+        
+        .group-details {
+            background-color: var(--white);
+            border-radius: var(--radius);
+            padding: 2rem;
+            box-shadow: var(--shadow);
+            margin-bottom: 2rem;
+        }
+        
+        .group-name {
+            font-size: 1.75rem;
+            margin-bottom: 1rem;
+            color: var(--dark);
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        
+        .group-description {
+            margin-bottom: 1.5rem;
+            line-height: 1.8;
+            color: var(--secondary);
+        }
+        
+        .group-meta {
+            margin-bottom: 1.5rem;
+            color: var(--secondary);
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        
+        .member-list {
+            background-color: var(--white);
+            border-radius: var(--radius);
+            padding: 1.5rem;
+            box-shadow: var(--shadow);
+        }
+        
+        .member-list-title {
+            font-size: 1.25rem;
+            margin-bottom: 1rem;
+            padding-bottom: 0.5rem;
+            border-bottom: 1px solid #eee;
+        }
+        
+        .member-item {
+            padding: 0.75rem 0;
+            border-bottom: 1px solid #f5f5f5;
+            display: flex;
+            align-items: center;
+        }
+        
+        .avatar {
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            background-color: var(--primary-light);
+            color: var(--primary);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            margin-right: 0.75rem;
+        }
+        
+        .creator-badge {
+            background-color: var(--primary);
+            color: white;
+            font-size: 0.7rem;
+            padding: 0.25rem 0.5rem;
+            border-radius: 1rem;
+            margin-left: 0.5rem;
+        }
+        
+        .sidebar {
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+        }
+        
+        .action-card {
+            background-color: var(--white);
+            border-radius: var(--radius);
+            padding: 1.5rem;
+            box-shadow: var(--shadow);
+        }
+        
+        .action-card-title {
+            font-size: 1.1rem;
+            margin-bottom: 1rem;
+            padding-bottom: 0.5rem;
+            border-bottom: 1px solid #eee;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        
+        .action-btn {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.75rem;
+            border-radius: var(--radius);
+            text-decoration: none;
+            font-weight: 500;
+            color: var(--dark);
+            transition: all 0.2s ease;
+            margin-bottom: 0.5rem;
+        }
+        
+        .action-btn:hover {
+            background-color: #f8f9fa;
+        }
+        
+        .action-btn i {
+            width: 1.5rem;
+            text-align: center;
+            color: var(--primary);
+        }
+        
+        .action-btn.danger i {
+            color: var(--danger);
+        }
+        
+        .code-block {
+            background-color: #f1f3f5;
+            border-radius: var(--radius);
+            padding: 0.5rem 0.75rem;
+            font-family: monospace;
+            font-size: 0.9rem;
+            color: var(--secondary);
+            margin: 0.5rem 0;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+        
+        .code-block code {
+            flex-grow: 1;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+        
+        .code-block button {
+            background: none;
+            border: none;
+            color: var(--primary);
+            cursor: pointer;
+        }
+        
+        .no-group {
+            text-align: center;
+            padding: 3rem 1rem;
+            color: var(--secondary);
+        }
+        
+        @media (max-width: 768px) {
+            .main-content {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+    <script>
+        function copyToClipboard() {
+            const code = document.getElementById("invitationCode");
+            navigator.clipboard.writeText(code.textContent);
+            alert("Invitation code copied!");
+        }
+    </script>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>Group Details</h1>
+            <a th:href="@{/dashboard}" class="btn btn-outline">
+                <i class="fas fa-arrow-left"></i> Back to Dashboard
+            </a>
+        </div>
+
+        <div th:if="${group}" class="main-content">
+            <div class="details-container">
+                <div class="group-details">
+                    <h2 class="group-name">
+                        <i class="fas fa-users"></i>
+                        <span th:text="${group.name}">Group Name</span>
+                    </h2>
+                    
+                    <p class="group-description" th:text="${group.description ?: 'No description available.'}">
+                        This is the group description. It provides details about the group's purpose, goals, and activities.
+                    </p>
+                    
+                    <div class="group-meta">
+                        <i class="fas fa-user-shield"></i> Created by: 
+                        <strong th:text="${group.creator.username}">Creator Name</strong>
+                    </div>
+                    
+                    <a th:href="@{/groups/{id}/discussions(id=${group.id})}" class="btn">
+                        <i class="fas fa-comments"></i> Go to Discussions
+                    </a>
+                </div>
+                
+                <div class="member-list">
+                    <h3 class="member-list-title">
+                        <i class="fas fa-users"></i> Members (<span th:text="${group.members.size() + 1}">1</span>)
+                    </h3>
+                    
+                    <!-- Creator -->
+                    <div class="member-item">
+                        <div class="avatar" th:text="${#strings.substring(group.creator.username,0,1).toUpperCase()}">C</div>
+                        <div th:text="${group.creator.username}">Creator Username</div>
+                        <div class="creator-badge">Creator</div>
+                    </div>
+                    
+                    <!-- Other Members -->
+                    <div th:each="member : ${group.members}" class="member-item">
+                        <div class="avatar" th:text="${#strings.substring(member.username,0,1).toUpperCase()}">M</div>
+                        <div th:text="${member.username}">Member Username</div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="sidebar">
+                <!-- Invitation Info -->
+                <div class="action-card">
+                    <h3 class="action-card-title">
+                        <i class="fas fa-ticket-alt"></i> Invitation
+                    </h3>
+                    <div class="code-block">
+                        <code id="invitationCode" th:text="${group.invitationCode}">CODE1234</code>
+                        <button onclick="copyToClipboard()"><i class="fas fa-copy"></i></button>
+                    </div>
+                    <a th:href="@{/groups/{id}/invite(id=${group.id})}" class="action-btn">
+                        <i class="fas fa-user-plus"></i> Invite Members
+                    </a>
+                </div>
+                
+                <!-- Group Actions -->
+                <div class="action-card">
+                    <h3 class="action-card-title">
+                        <i class="fas fa-cog"></i> Group Actions
+                    </h3>
+                    
+                    <!-- Show if user is creator -->
+                    <div th:if="${isCreator}">
+                        <a th:href="@{/groups/{id}/edit(id=${group.id})}" class="action-btn">
+                            <i class="fas fa-edit"></i> Edit Group
+                        </a>
+                        <a th:href="@{/groups/{id}/delete(id=${group.id})}" class="action-btn danger">
+                            <i class="fas fa-trash-alt"></i> Delete Group
+                        </a>
+                    </div>
+                    
+                    <!-- Show if user is not creator -->
+                    <div th:if="${!isCreator}">
+                        <a th:href="@{/groups/{id}/leave(id=${group.id})}" class="action-btn danger">
+                            <i class="fas fa-sign-out-alt"></i> Leave Group
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div th:unless="${group}" class="no-group">
+            <i class="fas fa-exclamation-circle" style="font-size: 3rem; margin-bottom: 1rem; color: #ccc;"></i>
+            <p>No group found!</p>
+            <a href="/groups" class="btn">
+                <i class="fas fa-arrow-left"></i> Back to Groups List
+            </a>
+        </div>
+    </div>
+</body>
+</html>

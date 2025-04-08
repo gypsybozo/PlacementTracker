@@ -6,35 +6,47 @@
     <link rel="stylesheet" th:href="@{/css/styles.css}">
 </head>
 <body>
-<div class="container">
-    <h2>Register</h2>
+    <div class="container">
+        <div class="form-wrapper">
+            <h1>Create Your Account</h1>
 
-    <form th:action="@{/register}" method="post" th:object="${user}">
-        <label>Username:</label>
-        <input type="text" th:field="*{username}" required/><br>
-    
-        <label>Email:</label>
-        <input type="email" th:field="*{email}" required/><br>
-    
-        <label>Password:</label>
-        <input type="password" th:field="*{password}" required/><br>
-    
-        <label>Confirm Password:</label>
-        <input type="password" th:field="*{confirmPassword}" required/><br>
-    
-        <button type="submit">Register</button>
-        <div th:if="${#fields.hasErrors('username')}" th:errors="*{username}"></div>
-        <div th:if="${#fields.hasErrors('email')}" th:errors="*{email}"></div>
-        <div th:if="${#fields.hasErrors('password')}" th:errors="*{password}"></div>
-        <div th:if="${#fields.hasErrors('confirmPassword')}" th:errors="*{confirmPassword}"></div>
+            <div th:if="${error}" class="alert alert-danger" th:text="${error}"></div>
+            <div th:if="${message}" class="alert alert-success" th:text="${message}"></div>
 
-    </form>
-    
-    <p th:if="${error}" class="error" th:text="${error}"></p>
-    <p th:if="${message}" class="success" th:text="${message}"></p>
-    
+            <form th:action="@{/register}" method="post" th:object="${user}">
+                <div class="form-group">
+                    <label for="username">Username</label>
+                    <input type="text" id="username" th:field="*{username}" class="form-control" required>
+                    <span th:if="${#fields.hasErrors('username')}" th:errors="*{username}" class="text-danger"></span>
+                </div>
 
-    <p th:if="${error}" class="error" th:text="${error}"></p>
-</div>
+                <div class="form-group">
+                    <label for="email">Email</label>
+                    <input type="email" id="email" th:field="*{email}" class="form-control" required>
+                    <span th:if="${#fields.hasErrors('email')}" th:errors="*{email}" class="text-danger"></span>
+                </div>
+
+                <div class="form-group">
+                    <label for="password">Password</label>
+                    <input type="password" id="password" th:field="*{password}" class="form-control" required>
+                    <span th:if="${#fields.hasErrors('password')}" th:errors="*{password}" class="text-danger"></span>
+                </div>
+
+                <div class="form-group">
+                    <label for="confirmPassword">Confirm Password</label>
+                    <input type="password" id="confirmPassword" th:field="*{confirmPassword}" class="form-control" required>
+                    <span th:if="${#fields.hasErrors('confirmPassword')}" th:errors="*{confirmPassword}" class="text-danger"></span>
+                </div>
+
+                <div class="form-group">
+                    <button type="submit" class="btn btn-primary">Register</button>
+                </div>
+            </form>
+
+            <div class="form-footer">
+                <p>Already have an account? <a th:href="@{/login}">Login</a></p>
+            </div>
+        </div>
+    </div>
 </body>
 </html>

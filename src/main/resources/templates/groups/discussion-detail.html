@@ -1,0 +1,238 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Discussion Thread</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        :root {
+            --primary: #e45e35;
+            --primary-light: #f8f9fa;
+            --secondary: #6c757d;
+            --light: #f8f9fa;
+            --dark: #343a40;
+            --white: #ffffff;
+            --shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+            --radius: 8px;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        body {
+            background-color: #e1e5e9;
+            color: #333;
+            line-height: 1.6;
+            padding: 0;
+            margin: 0;
+        }
+        
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+            padding: 1.5rem;
+        }
+        
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1.5rem;
+        }
+        
+        .back-link {
+            display: flex;
+            align-items: center;
+            color: #666;
+            text-decoration: none;
+            margin-bottom: 1.5rem;
+            font-weight: 500;
+        }
+        
+        .back-link i {
+            margin-right: 0.5rem;
+        }
+        
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            padding: 0.7rem 1.5rem;
+            background-color: var(--primary);
+            color: white;
+            border: none;
+            border-radius: var(--radius);
+            text-decoration: none;
+            font-weight: 500;
+            cursor: pointer;
+        }
+        
+        .btn-outline {
+            background-color: transparent;
+            color: var(--primary);
+            border: 1px solid var(--primary);
+        }
+        
+        .card {
+            background-color: var(--white);
+            border-radius: var(--radius);
+            padding: 1.5rem;
+            margin-bottom: 1rem;
+            box-shadow: var(--shadow);
+        }
+        
+        .post-header {
+            display: flex;
+            align-items: center;
+            margin-bottom: 0.5rem;
+            font-size: 0.9rem;
+            color: #666;
+        }
+        
+        .avatar {
+            width: 28px;
+            height: 28px;
+            border-radius: 50%;
+            background-color: #4c6ef5;
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            margin-right: 0.5rem;
+        }
+        
+        .discussion-title {
+            font-size: 1.5rem;
+            font-weight: 600;
+            margin-bottom: 0.75rem;
+            color: #222;
+        }
+        
+        .discussion-content {
+            margin-bottom: 1.5rem;
+            line-height: 1.5;
+        }
+        
+        .dot-separator {
+            margin: 0 0.5rem;
+        }
+        
+        .comment-input {
+            background-color: #f8f9fa;
+            border-radius: var(--radius);
+            padding: 1rem;
+            margin-bottom: 1.5rem;
+        }
+        
+        .comment-textarea {
+            width: 100%;
+            padding: 0.75rem;
+            border: 1px solid #ddd;
+            border-radius: var(--radius);
+            resize: vertical;
+            margin-bottom: 1rem;
+            min-height: 100px;
+        }
+        
+        .comment-count {
+            font-size: 0.9rem;
+            color: #666;
+            margin-bottom: 1rem;
+        }
+        
+        .comment-card {
+            background-color: var(--white);
+            border-radius: var(--radius);
+            padding: 1.5rem;
+            margin-bottom: 0.5rem;
+            box-shadow: var(--shadow);
+            border-left: 3px solid #f0f0f0;
+        }
+        
+        .comment-content {
+            margin-bottom: 1rem;
+        }
+        
+        .action-btn {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            background: none;
+            border: none;
+            cursor: pointer;
+            color: #666;
+            font-size: 14px;
+        }
+        
+        .action-btn:hover {
+            color: var(--primary);
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>Discussion</h1>
+            <a th:href="@{/dashboard}" class="btn btn-outline">
+                <i class="fas fa-arrow-left"></i> Back to Dashboard
+            </a>
+        </div>
+        
+        <a th:href="@{/groups/{groupId}/discussions(groupId=${discussion.group.id})}" class="back-link">
+            <i class="fas fa-arrow-left"></i> Back to Discussions
+        </a>
+        
+        <div class="card">
+            <div class="post-header">
+                <div class="avatar" th:text="${#strings.substring(discussion.user.username,0,1).toUpperCase()}">T</div>
+                <span>Posted by <span th:text="${discussion.user.username}">TechEnthusiast</span></span>
+                <span class="dot-separator">•</span>
+                <span th:text="${#temporals.format(discussion.createdAt, 'MMM d, yyyy')}">Apr 7, 2025</span>
+            </div>
+            <h1 class="discussion-title" th:text="${discussion.title}">What skills have you been working on lately?</h1>
+            <p class="discussion-content" th:text="${discussion.content}">I've been learning React and TypeScript recently, and I'm curious what technologies everyone else has been exploring. What are you all working on these days? Any resources you'd recommend?</p>
+        </div>
+        
+        <!-- Comment input form -->
+        <div class="card comment-input">
+            <div class="comment-avatar user-meta">
+                <div class="avatar" style="background-color: #bc7654;">C</div>
+            </div>
+            <form th:action="@{/groups/{groupId}/discussions/{discussionId}/comment(groupId=${discussion.group.id}, discussionId=${discussion.id})}"
+                method="post" th:object="${commentDto}">
+                <textarea th:field="*{content}" class="comment-textarea" placeholder="What are your thoughts?"></textarea>
+                <button type="submit" class="btn">Comment</button>
+            </form>
+        </div>
+        
+        <div class="comment-count">
+            <span th:text="${comments.size()}">3</span> Comments
+        </div>
+        
+        <!-- Comments list -->
+        <div th:each="comment : ${comments}" class="comment-card">
+            <div class="post-header">
+                <div class="avatar" th:if="${commentStat.index % 2 == 0}" style="background-color: #8cc74d;" th:text="${#strings.substring(comment.user.username,0,1).toUpperCase()}">R</div>
+                <div class="avatar" th:if="${commentStat.index % 2 == 1}" style="background-color: #bc7654;" th:text="${#strings.substring(comment.user.username,0,1).toUpperCase()}">C</div>
+                <span th:text="${comment.user.username}">RustFan42</span>
+                <span class="dot-separator">•</span>
+                <span th:text="${#temporals.format(comment.createdAt, 'MMM d, yyyy')}">Apr 7, 2025</span>
+            </div>
+            <p class="comment-content" th:text="${comment.content}">I've been diving deep into Rust. It's been challenging but very rewarding. The ownership model is a game-changer once you understand it.</p>
+            <button class="action-btn">
+                <i class="far fa-comment-dots"></i> <span>Reply</span>
+            </button>
+        </div>
+        
+        <div th:if="${comments.isEmpty()}" class="comment-card">
+            <p>No comments yet. Be the first to share your thoughts!</p>
+        </div>
+    </div>
+</body>
+</html>
