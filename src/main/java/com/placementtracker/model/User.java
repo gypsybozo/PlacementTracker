@@ -1,8 +1,14 @@
 package com.placementtracker.model;
 
+import com.placementtracker.model.JobPreference;
+
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import lombok.EqualsAndHashCode;
+import lombok.Getter;
+import lombok.Setter;
+import lombok.ToString;
 
 import javax.persistence.*;
 import javax.validation.constraints.Email;
@@ -11,10 +17,14 @@ import java.time.LocalDateTime;
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.Set;
+import java.util.prefs.Preferences;
 
-@Data
+@Getter
+@Setter
 @NoArgsConstructor
 @AllArgsConstructor
+@ToString(exclude = "jobPreference")
+@EqualsAndHashCode(exclude = "jobPreference")
 @Entity
 @Table(name = "users")
 public class User {
@@ -53,4 +63,8 @@ public class User {
     public void prePersist() {
         createdAt = LocalDateTime.now();
     }
+
+    @OneToOne(mappedBy = "user")
+    private JobPreference jobPreference;
+
 }

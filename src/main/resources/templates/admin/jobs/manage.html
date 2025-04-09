@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Post a Job - Coding Placement Tracker</title>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" th:href="@{/css/styles.css}" />
+</head>
+<body>
+<div class="dashboard-container">
+    <!-- Sidebar Navigation -->
+    <nav class="sidebar">
+        <div class="logo">
+            <h2>Admin Panel</h2>
+        </div>
+        <ul class="nav-links">
+            <li><a th:href="@{/admin/dashboard}"><span class="icon">📊</span> Dashboard</a></li>
+            <li><a th:href="@{/admin/users}"><span class="icon">👥</span> Users</a></li>
+            <li><a th:href="@{/admin/jobs/manage}"><span class="icon">💼</span> Jobs</a></li>
+            <li><a th:href="@{/admin/notifications}"><span class="icon">🔔</span> Notifications</a></li>
+            <li><a th:href="@{/dashboard}"><span class="icon">🏠</span> Main Site</a></li>
+        </ul>
+        <div class="logout">
+            <a th:href="@{/logout}"><span class="icon">🚪</span> Logout</a>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <main class="main-content">
+        <h1>Post a New Job</h1>
+
+        <!-- ✅ Flash Message -->
+        <div th:if="${successMessage}" class="alert success">
+            <p th:text="${successMessage}"></p>
+        </div>
+
+        <!-- ✅ Job Posting Form -->
+        <form th:action="@{/admin/jobs/save}" th:object="${job}" method="post" class="job-form">
+            <div class="form-group">
+                <label>Title:</label>
+                <input type="text" th:field="*{title}" required />
+            </div>
+
+            <div class="form-group">
+                <label>Company:</label>
+                <input type="text" th:field="*{company}" required />
+            </div>
+
+            <div class="form-group">
+                <label>Description:</label>
+                <textarea th:field="*{description}" rows="4" required></textarea>
+            </div>
+
+            <div class="form-group">
+                <label>Location:</label>
+                <input type="text" th:field="*{location}" />
+            </div>
+
+            <div class="form-group">
+                <label>Skills Required:</label>
+                <input type="text" th:field="*{skillsRequired}" />
+            </div>
+
+            <div class="form-group">
+                <label>Experience (Years):</label>
+                <input type="number" th:field="*{experienceYears}" />
+            </div>
+
+            <div class="form-group">
+                <label>Salary Range:</label>
+                <input type="text" th:field="*{salaryRange}" />
+            </div>
+
+            <div class="form-group">
+                <label>Application Deadline:</label>
+                <input type="datetime-local" th:field="*{applicationDeadline}" />
+            </div>
+
+            <div class="form-group">
+                <label>Is Active:</label>
+                <input type="checkbox" th:field="*{active}" />
+            </div>
+
+            <button type="submit" class="btn">Post Job</button>
+        </form>
+    </main>
+</div>
+</body>
+</html>

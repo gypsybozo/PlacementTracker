@@ -23,7 +23,7 @@ public class Notification {
     private User user;
 
     @ManyToOne
-    @JoinColumn(name = "job_id", referencedColumnName = "id")
+    @JoinColumn(name = "job_id", referencedColumnName = "id", nullable = true)
     private Job job;
 
     @Column(nullable = false)
@@ -51,4 +51,9 @@ public class Notification {
     public void prePersist() {
         createdAt = LocalDateTime.now();
     }
+
+    @Column(name = "related_job_id")
+    private Long relatedJobId;
+
+
 }

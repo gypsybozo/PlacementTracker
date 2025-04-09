@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Admin Dashboard - Coding Placement Tracker</title>
+    <link rel="stylesheet" th:href="@{/css/styles.css}">
+</head>
+<body>
+    <div class="dashboard-container">
+        <nav class="sidebar">
+            <div class="logo">
+                <h2>Admin Panel</h2>
+            </div>
+            <ul class="nav-links">
+                <li class="active"><a th:href="@{/admin/dashboard}"><span class="icon">📊</span> Dashboard</a></li>
+                <li><a th:href="@{/admin/users}"><span class="icon">👥</span> Users</a></li>
+                <li><a th:href="@{/admin/jobs/manage}"><span class="icon">🏢</span> Jobs</a></li>
+                <li><a th:href="@{/admin/notifications}"><span class="icon">🔔</span> Notifications</a></li>
+                <li><a th:href="@{/dashboard}"><span class="icon">🏠</span> Main Site</a></li>
+            </ul>
+            <div class="logout">
+                <a th:href="@{/logout}"><span class="icon">🚪</span> Logout</a>
+            </div>
+        </nav>
+        
+        <main class="content">
+            <header>
+                <div class="header-container">
+                    <h1>Admin Dashboard</h1>
+                </div>
+                
+                <div th:if="${param.success}" class="alert alert-success">
+                    <p th:text="${param.success == 'login'} ? 'Login successful!' : 'Operation completed successfully!'">Success message</p>
+                </div>
+            </header>
+            
+            <section class="stats-overview">
+                <div class="stat-card">
+                    <h3>Total Users</h3>
+                    <p class="stat-number" th:text="${userCount}">0</p>
+                    <a th:href="@{/admin/users}" class="btn btn-small">Manage</a>
+                </div>
+                
+                <div class="stat-card">
+                    <h3>Total Jobs</h3>
+                    <p class="stat-number" th:text="${jobCount}">0</p>
+                    <a th:href="@{/jobs/admin/manage}" class="btn btn-small">Manage</a>
+                </div>
+            </section>
+            
+            <section class="quick-actions">
+                <h2>Quick Actions</h2>
+                <div class="action-buttons">
+                    <a th:href="@{/admin/users}" class="btn btn-primary">Manage Users</a>
+                    <a th:href="@{/admin/jobs/manage}" class="btn btn-primary">Create Job</a>
+                    <a th:href="@{/admin/notifications/send}" class="btn btn-primary">Send Notification</a>
+                </div>
+            </section>
+        </main>
+    </div>
+</body>
+</html>

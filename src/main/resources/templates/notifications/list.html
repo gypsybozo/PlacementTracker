@@ -71,8 +71,16 @@
                 <div class="notification-body" th:text="${notification.message}">
                     We found a job that matches your preferences!
                 </div>
-                <div class="notification-time" th:text="${#temporals.format(notification.timestamp, 'dd MMM yyyy hh:mm a')}">5 Apr 2025 10:30 AM</div>
-                <div class="notification-actions">
+                <!-- ✅ This shows job info if present -->
+                <div th:if="${notification.job != null}">
+                    <p><strong>Related Job:</strong> 
+                        <a th:href="@{/jobs/{id}(id=${notification.job.id})}" 
+                        th:text="${notification.job.company + ' - ' + notification.job.title}">
+                        </a>
+                    </p>
+                </div>
+                <div class="notification-time" th:text="${#temporals.format(notification.createdAt, 'dd MMM yyyy hh:mm a')}">5 Apr 2025 10:30 AM</div>
+                <!--<div class="notification-actions">
                     <form th:action="@{/notifications/mark-read}" method="post" style="display:inline;">
                         <input type="hidden" name="id" th:value="${notification.id}" />
                         <button type="submit" class="btn btn-secondary" th:if="${!notification.read}">Mark as Read</button>
@@ -81,7 +89,7 @@
                         <input type="hidden" name="id" th:value="${notification.id}" />
                         <button type="submit" class="btn btn-danger">Delete</button>
                     </form>
-                </div>
+                </div>-->
             </div>
         </section>
     </main>

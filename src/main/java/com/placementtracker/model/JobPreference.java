@@ -2,15 +2,23 @@ package com.placementtracker.model;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
+import lombok.ToString;
+import lombok.EqualsAndHashCode;
 
 import javax.persistence.*;
 import java.util.HashSet;
 import java.util.Set;
+import java.util.List;
 
-@Data
+@Getter
+@Setter
 @NoArgsConstructor
 @AllArgsConstructor
+@ToString(exclude = "user") // Prevents infinite loop in toString
+@EqualsAndHashCode(exclude = "user") // Prevents infinite loop in hashCode
 @Entity
 @Table(name = "job_preferences")
 public class JobPreference {
@@ -48,4 +56,7 @@ public class JobPreference {
     
     @Column(name = "notify_enabled")
     private boolean notifyEnabled = true;
+
+    @ElementCollection
+    private List<String> preferredTags;
 }

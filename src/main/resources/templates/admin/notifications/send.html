@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Send Notification - Coding Placement Tracker</title>
+    <link rel="stylesheet" th:href="@{/css/styles.css}">
+</head>
+<body>
+    <div class="dashboard-container">
+        <nav class="sidebar">
+            <div class="logo">
+                <h2>Admin Panel</h2>
+            </div>
+            <ul class="nav-links">
+                <li><a th:href="@{/admin/dashboard}"><span class="icon">📊</span> Dashboard</a></li>
+                <li><a th:href="@{/admin/users}"><span class="icon">👥</span> Users</a></li>
+                <li><a th:href="@{/admin/jobs/manage}"><span class="icon">🏢</span> Jobs</a></li>
+                <li><a th:href="@{/admin/notifications}"><span class="icon">🔔</span> Notifications</a></li>
+                <li><a th:href="@{/logout}"><span class="icon">🚪</span> Logout</a></li>
+            </ul>
+        </nav>
+
+        <main class="main-content">
+            <h1>Send Notification/Job Alert</h1>
+
+            <form th:action="@{/admin/notifications/send}" method="post" class="notification-form">
+                <div class="form-group">
+                    <label for="title">Subject:</label>
+                    <input type="text" id="title" name="title" required>
+                </div>
+            
+                <div class="form-group">
+                    <label for="message">Message:</label>
+                    <textarea id="message" name="message" rows="5" required></textarea>
+                </div>
+            
+                <div class="form-group">
+                    <label for="notificationType">Notification Type:</label>
+                    <select id="notificationType" name="notificationType" required>
+                        <option value="">Select Type</option>
+                        <option value="GENERAL">General (All Users)</option>
+                        <option value="JOB">Job-Specific</option>
+                    </select>
+                </div>
+            
+                <div class="form-group" id="jobIdGroup" style="display: none;">
+                    <label for="jobId">Select Job:</label>
+                    <select class="form-control" id="jobId" name="jobId">
+                        <option value="">-- Select Job --</option>
+                        <option th:each="job : ${jobs}"
+                                th:value="${job.id}"
+                                th:text="${job.title + ' at ' + job.company}">
+                        </option>
+                    </select>
+                </div>
+            
+                <button type="submit" class="btn">Send Notification</button>
+            </form>
+        </main>
+    </div>
+</body>
+<script>
+    document.getElementById('notificationType').addEventListener('change', function () {
+        const jobIdGroup = document.getElementById('jobIdGroup');
+        jobIdGroup.style.display = this.value === 'JOB' ? 'block' : 'none';
+    });
+</script>
+</html>

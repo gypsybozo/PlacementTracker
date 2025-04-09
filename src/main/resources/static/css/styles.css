@@ -973,3 +973,122 @@ header {
   .preferences-nav-item:hover {
     color: #1a73e8;
   }
+
+  .dashboard-container {
+    display: flex;
+    min-height: 100vh;
+    font-family: Arial, sans-serif;
+}
+
+.sidebar {
+    width: 220px;
+    color: #fff;
+    padding: 1rem;
+}
+
+.sidebar .logo {
+    margin-bottom: 2rem;
+}
+
+.nav-links {
+    list-style: none;
+    padding: 0;
+}
+
+.nav-links li {
+    margin: 1rem 0;
+}
+
+.nav-links a {
+    color: #fff;
+    text-decoration: none;
+}
+
+.main-content {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center; /* Center horizontally */
+    justify-content: center; /* Center vertically */
+    padding: 2rem;
+    background-color: #f9f9f9;
+}
+
+.notification-form {
+    width: 100%;
+    max-width: 500px;
+    background-color: white;
+    padding: 2rem;
+    border-radius: 10px;
+    box-shadow: 0 0 10px rgba(0,0,0,0.1);
+}
+
+.notification-form .form-group {
+    margin-bottom: 1.5rem;
+}
+
+.notification-form label {
+    display: block;
+    margin-bottom: 0.5rem;
+    font-weight: bold;
+}
+
+.notification-form input,
+.notification-form textarea,
+.notification-form select {
+    width: 100%;
+    padding: 0.75rem;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+}
+
+.btn {
+    background-color: #007bff;
+    color: white;
+    padding: 0.75rem 1.5rem;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+.btn:hover {
+    background-color: #0056b3;
+}
+.alert.success {
+  padding: 10px;
+  background-color: #d4edda;
+  border-left: 6px solid #28a745;
+  color: #155724;
+  margin-bottom: 20px;
+}
+.job-form .form-group {
+  margin-bottom: 15px;
+}
+
+.job-form label {
+  font-weight: bold;
+  display: block;
+  margin-bottom: 5px;
+}
+
+.job-form input,
+.job-form textarea,
+.job-form select {
+  width: 100%;
+  padding: 8px;
+  border-radius: 4px;
+  border: 1px solid #ccc;
+}
+
+.job-form .btn {
+  padding: 10px 20px;
+  background-color: #007bff;
+  border: none;
+  color: white;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.job-form .btn:hover {
+  background-color: #0056b3;
+}
