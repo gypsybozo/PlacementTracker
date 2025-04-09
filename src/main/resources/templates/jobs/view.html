@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title th:text="${job.title} + ' - Coding Placement Tracker'">Job Details - Coding Placement Tracker</title>
+    <link rel="stylesheet" th:href="@{/css/styles.css}">
+</head>
+<body>
+    <div class="dashboard-container">
+        <nav class="sidebar">
+            <div class="logo">
+                <h2>Coding Tracker</h2>
+            </div>
+            <ul class="nav-links">
+                <li><a th:href="@{/dashboard}"><span class="icon">📊</span> Dashboard</a></li>
+                <li><a th:href="@{/progress}"><span class="icon">📝</span> Progress</a></li>
+                <li><a th:href="@{/groups}"><span class="icon">👥</span> Study Groups</a></li>
+                <li class="active"><a th:href="@{/jobs}"><span class="icon">🏢</span> Jobs</a></li>
+                <li><a th:href="@{/preferences}"><span class="icon">⚙️</span> Settings</a></li>
+            </ul>
+            <div class="logout">
+                <a th:href="@{/logout}"><span class="icon">🚪</span> Logout</a>
+            </div>
+        </nav>
+        
+        <main class="content">
+            <header>
+                <div class="header-container">
+                    <a th:href="@{/jobs}" class="back-link">&larr; Back to Jobs</a>
+                </div>
+            </header>
+            
+            <section class="job-detail">
+                <div class="job-detail-header">
+                    <h1 th:text="${job.title}">Job Title</h1>
+                    <div class="job-company">
+                        <h2 th:text="${job.company}">Company Name</h2>
+                        <span th:text="${job.location}">Location</span>
+                    </div>
+                </div>
+                
+                <div class="job-meta">
+                    <div class="meta-item" th:if="${job.salaryRange}">
+                        <span class="meta-label">Salary:</span>
+                        <span class="meta-value" th:text="${job.salaryRange}">Salary Range</span>
+                    </div>
+                    
+                    <div class="meta-item" th:if="${job.experienceYears}">
+                        <span class="meta-label">Experience:</span>
+                        <span class="meta-value" th:text="${job.experienceYears} + ' years'">Experience</span>
+                    </div>
+                    
+                    <div class="meta-item">
+                        <span class="meta-label">Posted:</span>
+                        <span class="meta-value" th:text="${#temporals.format(job.postedDate, 'dd MMM yyyy')}">Posted Date</span>
+                    </div>
+                    
+                    <div class="meta-item" th:if="${job.applicationDeadline}">
+                        <span class="meta-label">Apply By:</span>
+                        <span class="meta-value" th:text="${#temporals.format(job.applicationDeadline, 'dd MMM yyyy')}">Deadline</span>
+                    </div>
+                </div>
+                
+                <div class="job-tags">
+                    <span th:each="tag : ${job.tags}" class="tag" th:text="${tag}">Tag</span>
+                </div>
+                
+                <div class="job-section">
+                    <h3>Description</h3>
+                    <div class="job-description" th:utext="${job.description}">Job Description</div>
+                </div>
+                
+                <div class="job-section" th:if="${job.skillsRequired}">
+                    <h3>Required Skills</h3>
+                    <div class="job-skills" th:utext="${job.skillsRequired}">Skills</div>
+                </div>
+                
+                <div class="job-actions">
+                    <a href="#" class="btn btn-primary">Apply Now</a>
+                    <a href="#" class="btn btn-secondary">Save Job</a>
+                </div>
+            </section>
+        </main>
+    </div>
+</body>
+</html>

@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Notifications - Coding Placement Tracker</title>
+    <link rel="stylesheet" th:href="@{/css/styles.css}">
+    <style>
+        .notification-card {
+            background-color: #f9f9f9;
+            padding: 15px 20px;
+            margin-bottom: 15px;
+            border-left: 4px solid #007bff;
+            border-radius: 6px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+            transition: background-color 0.2s;
+        }
+        .notification-card.unread {
+            background-color: #e8f0ff;
+            border-left-color: #0056b3;
+        }
+        .notification-header {
+            font-weight: bold;
+            margin-bottom: 5px;
+        }
+        .notification-time {
+            font-size: 0.85em;
+            color: #777;
+        }
+        .notification-actions {
+            margin-top: 10px;
+        }
+        .notification-actions button {
+            margin-right: 10px;
+        }
+    </style>
+</head>
+<body>
+<div class="dashboard-container">
+    <nav class="sidebar">
+        <div class="logo">
+            <h2>Coding Tracker</h2>
+        </div>
+        <ul class="nav-links">
+            <li><a th:href="@{/dashboard}"><span class="icon">📊</span> Dashboard</a></li>
+            <li><a th:href="@{/progress}"><span class="icon">📝</span> Progress</a></li>
+            <li><a th:href="@{/groups}"><span class="icon">👥</span> Study Groups</a></li>
+            <li><a th:href="@{/jobs}"><span class="icon">🏢</span> Jobs</a></li>
+            <li><a th:href="@{/preferences}"><span class="icon">⚙️</span> Settings</a></li>
+            <li class="active"><a th:href="@{/notifications}"><span class="icon">🔔</span> Notifications</a></li>
+        </ul>
+        <div class="logout">
+            <a th:href="@{/logout}"><span class="icon">🚪</span> Logout</a>
+        </div>
+    </nav>
+
+    <main class="content">
+        <header>
+            <div class="header-container">
+                <h1>Notifications</h1>
+            </div>
+        </header>
+
+        <section class="notifications-list">
+            <div th:if="${notifications.isEmpty()}">
+                <p>No notifications at the moment.</p>
+            </div>
+
+            <div th:each="notification : ${notifications}"
+                 th:class="'notification-card ' + (${notification.read} ? '' : 'unread')">
+                <div class="notification-header" th:text="${notification.title}">New Job Opening!</div>
+                <div class="notification-body" th:text="${notification.message}">
+                    We found a job that matches your preferences!
+                </div>
+                <div class="notification-time" th:text="${#temporals.format(notification.timestamp, 'dd MMM yyyy hh:mm a')}">5 Apr 2025 10:30 AM</div>
+                <div class="notification-actions">
+                    <form th:action="@{/notifications/mark-read}" method="post" style="display:inline;">
+                        <input type="hidden" name="id" th:value="${notification.id}" />
+                        <button type="submit" class="btn btn-secondary" th:if="${!notification.read}">Mark as Read</button>
+                    </form>
+                    <form th:action="@{/notifications/delete}" method="post" style="display:inline;">
+                        <input type="hidden" name="id" th:value="${notification.id}" />
+                        <button type="submit" class="btn btn-danger">Delete</button>
+                    </form>
+                </div>
+            </div>
+        </section>
+    </main>
+</div>
+</body>
+</html>

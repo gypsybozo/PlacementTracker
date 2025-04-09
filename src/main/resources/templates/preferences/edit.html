@@ -1,0 +1,260 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Job Preferences - Coding Placement Tracker</title>
+    <link rel="stylesheet" th:href="@{/css/styles.css}">
+    <style>
+        .tags-input-container {
+            border: 1px solid #ccc;
+            padding: 5px;
+            min-height: 40px;
+            display: flex;
+            flex-wrap: wrap;
+            align-items: center;
+        }
+        .tags-list {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 5px;
+        }
+        .tag {
+            background-color: #007bff;
+            color: white;
+            padding: 5px 10px;
+            border-radius: 3px;
+            display: flex;
+            align-items: center;
+        }
+        .tag-remove {
+            margin-left: 5px;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+    <div class="dashboard-container">
+        <nav class="sidebar">
+            <div class="logo">
+                <h2>Coding Tracker</h2>
+            </div>
+            <ul class="nav-links">
+                <li><a th:href="@{/dashboard}"><span class="icon">📊</span> Dashboard</a></li>
+                <li><a th:href="@{/progress}"><span class="icon">📝</span> Progress</a></li>
+                <li><a th:href="@{/groups}"><span class="icon">👥</span> Study Groups</a></li>
+                <li><a th:href="@{/jobs}"><span class="icon">🏢</span> Jobs</a></li>
+                <li class="active"><a th:href="@{/preferences}"><span class="icon">⚙️</span> Settings</a></li>
+            </ul>
+            <div class="logout">
+                <a th:href="@{/logout}"><span class="icon">🚪</span> Logout</a>
+            </div>
+        </nav>
+    
+        <main class="content">
+            <header>
+                <div class="header-container">
+                    <h1>Job Preferences</h1>
+                </div>
+                <div th:if="${param.success}" class="alert alert-success">
+                    <p th:text="${param.success == 'updated'} ? 'Preferences updated successfully!' : 'Notification settings updated!'">Success!</p>
+                </div>
+            </header>
+    
+            <section class="preferences-form">
+                <form th:action="@{/preferences/update}" th:object="${preferenceDto}" method="post">
+                    <input type="hidden" th:field="*{id}" />
+                
+                    <!-- Notification Setting -->
+                    <div class="form-group">
+                        <h3>Notification Settings</h3>
+                        <div class="toggle-container">
+                            <label for="notifyEnabled">Enable Job Notifications:</label>
+                            <input type="checkbox" id="notifyEnabled" th:field="*{notifyEnabled}" />
+                        </div>
+                        <p class="help-text">Receive email notifications when new jobs match your preferences.</p>
+                    </div>
+                
+                    <!-- Minimum Salary -->
+                    <div class="form-group">
+                        <h3>Minimum Salary</h3>
+                        <input type="number" th:field="*{minSalary}" class="form-control" placeholder="Enter minimum desired salary" />
+                    </div>
+                
+                    <!-- Preferred Companies -->
+                    <div class="form-group">
+                        <h3>Preferred Companies</h3>
+                        <div class="tags-input-container">
+                            <div class="tags-list" id="companiesList">
+                                <div th:each="company, companyStat : *{preferredCompanies}" class="tag">
+                                    <span th:text="${company}">Company</span>
+                                    <span class="tag-remove">×</span>
+                                    <input type="hidden" th:field="*{preferredCompanies[__${companyStat.index}__]}" />
+                                </div>
+                            </div>
+                            <input type="text" id="companyInput" placeholder="Add company and press Enter..." />
+                        </div>
+                    </div>
+                
+                    <!-- Preferred Roles -->
+                    <div class="form-group">
+                        <h3>Preferred Roles</h3>
+                        <div class="tags-input-container">
+                            <div class="tags-list" id="rolesList">
+                                <div th:each="role, roleStat : *{preferredRoles}" class="tag">
+                                    <span th:text="${role}">Role</span>
+                                    <span class="tag-remove">×</span>
+                                    <input type="hidden" th:field="*{preferredRoles[__${roleStat.index}__]}" />
+                                </div>
+                            </div>
+                            <input type="text" id="roleInput" placeholder="Add role and press Enter..." />
+                        </div>
+                    </div>
+                
+                    <!-- Preferred Locations -->
+                    <div class="form-group">
+                        <h3>Preferred Locations</h3>
+                        <div class="tags-input-container">
+                            <div class="tags-list" id="locationsList">
+                                <div th:each="location, locationStat : *{preferredLocations}" class="tag">
+                                    <span th:text="${location}">Location</span>
+                                    <span class="tag-remove">×</span>
+                                    <input type="hidden" th:field="*{preferredLocations[__${locationStat.index}__]}" />
+                                </div>
+                            </div>
+                            <input type="text" id="locationInput" placeholder="Add location and press Enter..." />
+                        </div>
+                    </div>
+                
+                    <!-- Preferred Skills -->
+                    <div class="form-group">
+                        <h3>Preferred Skills</h3>
+                        <div class="tags-input-container">
+                            <div class="tags-list" id="skillsList">
+                                <div th:each="skill, skillStat : *{preferredSkills}" class="tag">
+                                    <span th:text="${skill}">Skill</span>
+                                    <span class="tag-remove">×</span>
+                                    <input type="hidden" th:field="*{preferredSkills[__${skillStat.index}__]}" />
+                                </div>
+                            </div>
+                            <input type="text" id="skillInput" placeholder="Add skill and press Enter..." />
+                        </div>
+                    </div>
+                
+                    <div class="form-actions">
+                        <button type="submit" class="btn btn-primary">Save Preferences</button>
+                    </div>
+                </form>
+            </section>
+        </main>
+    </div>
+    
+    <script>
+        // Helper function to create indexed input names that Spring can bind
+        function createIndexedName(baseName, list) {
+            // Count existing inputs to determine the next index
+            const existingInputs = list.querySelectorAll(`input[name^="${baseName}["]`);
+            return `${baseName}[${existingInputs.length}]`;
+        }
+        
+        function setupTagInput(inputId, listId, inputNameBase) {
+            const input = document.getElementById(inputId);
+            const list = document.getElementById(listId);
+            
+            input.addEventListener("keydown", function (e) {
+                if (e.key === "Enter" && input.value.trim() !== "") {
+                    e.preventDefault();
+                    const value = input.value.trim();
+                    
+                    // Avoid duplicates
+                    let isDuplicate = false;
+                    list.querySelectorAll('span:first-child').forEach(function(span) {
+                        if (span.textContent.toLowerCase() === value.toLowerCase()) {
+                            isDuplicate = true;
+                        }
+                    });
+                    
+                    if (isDuplicate) {
+                        input.value = "";
+                        return;
+                    }
+                    
+                    const tagDiv = document.createElement("div");
+                    tagDiv.className = "tag";
+                    
+                    const spanText = document.createElement("span");
+                    spanText.textContent = value;
+                    
+                    const removeSpan = document.createElement("span");
+                    removeSpan.className = "tag-remove";
+                    removeSpan.textContent = "×";
+                    removeSpan.addEventListener('click', function() {
+                        tagDiv.remove();
+                        // After removing, we need to reorganize the indices
+                        reindexInputs(list, inputNameBase);
+                    });
+                    
+                    // Create indexed input name
+                    const inputName = createIndexedName(inputNameBase, list);
+                    
+                    const hiddenInput = document.createElement("input");
+                    hiddenInput.type = "hidden";
+                    hiddenInput.name = inputName;
+                    hiddenInput.value = value;
+                    
+                    tagDiv.appendChild(spanText);
+                    tagDiv.appendChild(removeSpan);
+                    tagDiv.appendChild(hiddenInput);
+                    list.appendChild(tagDiv);
+                    
+                    input.value = "";
+                }
+            });
+        }
+        
+        // Function to reindex inputs after removal
+        function reindexInputs(list, inputNameBase) {
+            const inputs = list.querySelectorAll('input[type="hidden"]');
+            inputs.forEach((input, index) => {
+                input.name = `${inputNameBase}[${index}]`;
+            });
+        }
+        
+        document.addEventListener("DOMContentLoaded", function () {
+            // Setup tag inputs with the correct Spring binding names
+            setupTagInput("companyInput", "companiesList", "preferredCompanies");
+            setupTagInput("roleInput", "rolesList", "preferredRoles");
+            setupTagInput("locationInput", "locationsList", "preferredLocations");
+            setupTagInput("skillInput", "skillsList", "preferredSkills");
+            
+            // Add event listeners to all existing tag remove buttons
+            document.querySelectorAll('.tag-remove').forEach(function(element) {
+                const list = element.closest('.tags-list');
+                const inputNameBase = list.id === 'companiesList' ? 'preferredCompanies' :
+                                    list.id === 'rolesList' ? 'preferredRoles' :
+                                    list.id === 'locationsList' ? 'preferredLocations' : 'preferredSkills';
+                
+                element.addEventListener('click', function() {
+                    const tagDiv = this.parentNode;
+                    tagDiv.remove();
+                    // Reindex after removal
+                    reindexInputs(list, inputNameBase);
+                });
+            });
+            
+            // Add form submit debugging
+            document.querySelector('form').addEventListener('submit', function(e) {
+                // For debugging purposes
+                console.log("Form submitted");
+                const formData = new FormData(this);
+                
+                for (let pair of formData.entries()) {
+                    console.log(pair[0] + ': ' + pair[1]);
+                }
+            });
+        });
+    </script>
+    
+    
+    
+</body>
+</html>

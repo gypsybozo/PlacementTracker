@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title th:text="${isRecommended} ? 'Recommended Jobs - Coding Placement Tracker' : 'Jobs - Coding Placement Tracker'">Jobs - Coding Placement Tracker</title>
+    <link rel="stylesheet" th:href="@{/css/styles.css}">
+</head>
+<body>
+    <div class="dashboard-container">
+        <nav class="sidebar">
+            <div class="logo">
+                <h2>Coding Tracker</h2>
+            </div>
+            <ul class="nav-links">
+                <li><a th:href="@{/dashboard}"><span class="icon">📊</span> Dashboard</a></li>
+                <li><a th:href="@{/progress}"><span class="icon">📝</span> Progress</a></li>
+                <li><a th:href="@{/groups}"><span class="icon">👥</span> Study Groups</a></li>
+                <li class="active"><a th:href="@{/jobs}"><span class="icon">🏢</span> Jobs</a></li>
+                <li><a th:href="@{/preferences}"><span class="icon">⚙️</span> Settings</a></li>
+            </ul>
+            <div class="logout">
+                <a th:href="@{/logout}"><span class="icon">🚪</span> Logout</a>
+            </div>
+        </nav>
+        
+        <main class="content">
+            <header>
+                <div class="header-container">
+                    <h1 th:text="${isRecommended} ? 'Recommended Jobs' : 'Job Listings'">Job Listings</h1>
+                    <div class="header-actions">
+                        <a th:href="@{/jobs}" class="btn btn-secondary" th:classappend="${isRecommended != null and !isRecommended} ? 'active' : ''">All Jobs</a>
+                        <a th:href="@{/jobs/recommended}" class="btn btn-secondary" th:classappend="${isRecommended} ? 'active' : ''">Recommended</a>
+                    </div>
+                </div>
+                
+                <!--<div class="search-container">
+                    <form th:action="@{/jobs/search}" method="get">
+                        <input type="text" name="keyword" th:value="${keyword}" placeholder="Search by title, company..." />
+                        <input type="text" name="location" th:value="${location}" placeholder="Location" />
+                        <button type="submit" class="btn btn-primary">Search</button>
+                    </form>
+                </div>-->
+                
+                <div th:if="${param.error}" class="alert alert-danger">
+                    <p th:text="${param.error == 'notfound'} ? 'Job not found' : 'An error occurred'">Error</p>
+                </div>
+            </header>
+            
+            <section class="jobs-list">
+                <div th:if="${jobs.empty}" class="no-jobs">
+                    <p th:text="${isRecommended} ? 'No recommended jobs found. Update your preferences to see more relevant jobs.' : 'No jobs found.'">No jobs found.</p>
+                    <a th:if="${isRecommended}" th:href="@{/preferences}" class="btn btn-primary">Update Preferences</a>
+                </div>
+                
+                <div th:each="job : ${jobs}" class="job-card">
+                    <div class="job-header">
+                        <h2 th:text="${job.title}">Job Title</h2>
+                        <span class="company" th:text="${job.company}">Company Name</span>
+                    </div>
+                    
+                    <div class="job-details">
+                        <div class="job-location">
+                            <span class="icon">📍</span>
+                            <span th:text="${job.location}">Location</span>
+                        </div>
+                        
+                        <div th:if="${job.salaryRange}" class="job-salary">
+                            <span class="icon">💰</span>
+                            <span th:text="${job.salaryRange}">Salary Range</span>
+                        </div>
+                        
+                        <div th:if="${job.experienceYears}" class="job-experience">
+                            <span class="icon">⏳</span>
+                            <span th:text="${job.experienceYears} + ' years experience'">Experience</span>
+                        </div>
+                    </div>
+                    
+                    <div class="job-tags">
+                        <span th:each="tag : ${job.tags}" class="tag" th:text="${tag}">Tag</span>
+                    </div>
+                    
+                    <div class="job-posted">
+                        <span>Posted: </span>
+                        <span th:text="${#temporals.format(job.postedDate, 'dd MMM yyyy')}">Date</span>
+                    </div>
+                    
+                    <div class="job-actions">
+                        <a th:href="@{/jobs/view/{id}(id=${job.id})}" class="btn btn-primary">View Details</a>
+                    </div>
+                </div>
+            </section>
+        </main>
+    </div>
+</body>
+</html>
