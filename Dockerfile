@@ -1,20 +1,24 @@
-# Build stage
-FROM eclipse-temurin:17 AS build
+# Use an official Java 17 image as the base
+FROM eclipse-temurin:17
+
+# Set the working directory
 WORKDIR /app
 
-# Copy the wrapper and permissions
-COPY .mvn/ .mvn
-COPY mvnw pom.xml ./
+# Copy Maven wrapper files and pom.xml
+COPY mvnw mvnw.cmd pom.xml ./
+COPY .mvn .mvn
+
+# Download dependencies
 RUN chmod +x mvnw && ./mvnw dependency:go-offline
 
-# Copy the rest of the code and build
+# Copy the source code
 COPY src ./src
-COPY application.properties ./application.properties
+
+# 🔥 Copy the .env file into the container
+COPY .env .env
+
+# Build the application
 RUN ./mvnw clean install -DskipTests
 
-# Run stage
-FROM eclipse-temurin:17
-WORKDIR /app
-COPY --from=build /app/target/coding-tracker-0.0.1-SNAPSHOT.jar app.jar
-EXPOSE 8080
-ENTRYPOINT ["java", "-jar", "app.jar"]
+# Run the application
+CMD ["java", "-jar", "target/coding-tracker-0.0.1-SNAPSHOT.jar"]
