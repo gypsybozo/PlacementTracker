@@ -6,3 +6,4 @@
 .idea/
 *.env
 application.properties
+.DS_Store
