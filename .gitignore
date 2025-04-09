@@ -5,5 +5,4 @@
 *.jar
 .idea/
 *.env
-application.properties
 .DS_Store

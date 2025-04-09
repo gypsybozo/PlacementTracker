@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <title>Admin Dashboard - Coding Placement Tracker</title>
-    <link rel="stylesheet" th:href="@{/css/styles.css}">
+    <link rel="stylesheet" th:href="@{/css/admin.css}">
 </head>
 <body>
     <div class="dashboard-container">
@@ -15,7 +15,7 @@
                 <li class="active"><a th:href="@{/admin/dashboard}"><span class="icon">📊</span> Dashboard</a></li>
                 <li><a th:href="@{/admin/users}"><span class="icon">👥</span> Users</a></li>
                 <li><a th:href="@{/admin/jobs/manage}"><span class="icon">🏢</span> Jobs</a></li>
-                <li><a th:href="@{/admin/notifications}"><span class="icon">🔔</span> Notifications</a></li>
+                <li><a th:href="@{/admin/notifications/send}"><span class="icon">🔔</span> Notifications</a></li>
                 <li><a th:href="@{/dashboard}"><span class="icon">🏠</span> Main Site</a></li>
             </ul>
             <div class="logout">

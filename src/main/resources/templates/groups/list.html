@@ -17,29 +17,165 @@
             --white: #ffffff;
             --shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
             --radius: 8px;
+            --sidebar-width: 260px; /* Added variable for sidebar width */
         }
-        
+
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
         }
-        
+
         body {
             background-color: #f5f7fb;
             color: #333;
             line-height: 1.6;
             padding: 0;
             margin: 0;
+            display: flex; /* Added for sidebar layout */
         }
-        
+
+        /* --- NEW Nav Sidebar Styles --- */
+        /* --- Updated Nav Sidebar Styles --- */
+        .nav-sidebar {
+            width: var(--sidebar-width);
+            height: 100vh; /* Full height */
+            /* Change background to white */
+            background-color: var(--white);
+            /* Change default text color */
+            color: var(--dark);
+            display: flex;
+            flex-direction: column;
+            padding: 1.5rem 1rem;
+            position: fixed; /* Fixed position */
+            left: 0;
+            top: 0;
+            overflow-y: auto; /* Scroll if content overflows */
+            z-index: 1000; /* Ensure it's above other content */
+            transition: width 0.3s ease; /* Smooth transition for potential collapse */
+            /* Add a subtle border to separate from main content */
+            border-right: 1px solid #eee;
+            box-shadow: var(--shadow); /* Optional: Add a slight shadow like cards */
+        }
+
+        .nav-sidebar .logo {
+            text-align: center;
+            margin-bottom: 2rem;
+            padding-bottom: 1rem;
+            /* Lighter border color */
+            border-bottom: 1px solid #eee;
+        }
+
+        .nav-sidebar .logo h2 {
+            /* Change logo text color to primary blue */
+            color: var(--primary);
+            font-size: 1.8rem; /* Slightly larger font */
+            font-weight: 600;
+        }
+
+        .nav-sidebar .nav-links {
+            list-style: none;
+            flex-grow: 1; /* Takes up available space */
+        }
+
+        .nav-sidebar .nav-links li {
+            margin-bottom: 0.5rem;
+        }
+
+        .nav-sidebar .nav-links a {
+            display: flex;
+            align-items: center;
+            gap: 0.8rem;
+            /* Change default link color */
+            color: #333; /* Dark grey/black text */
+            text-decoration: none;
+            padding: 0.8rem 1rem;
+            border-radius: var(--radius);
+            transition: background-color 0.2s ease, color 0.2s ease;
+            font-weight: 500; /* Slightly bolder text */
+        }
+
+        /* Updated hover/active state */
+        .nav-sidebar .nav-links a:hover,
+        .nav-sidebar .nav-links li.active a {
+            /* Light blue background */
+            background-color: var(--primary-light);
+            /* Primary blue text color */
+            color: var(--primary);
+        }
+
+         .nav-sidebar .nav-links a .icon {
+            display: inline-block;
+            width: 20px; /* Ensure icons align */
+            text-align: center;
+            font-size: 1.1rem;
+            /* Icons inherit text color, so they will change on hover/active too */
+        }
+
+        .nav-sidebar .logout {
+            margin-top: auto; /* Pushes logout to the bottom */
+            padding-top: 1rem;
+             /* Lighter border color */
+            border-top: 1px solid #eee;
+        }
+
+        .nav-sidebar .logout a {
+            display: flex;
+            align-items: center;
+            gap: 0.8rem;
+            /* Match default link color */
+            color: #555; /* Slightly lighter grey for logout */
+            text-decoration: none;
+            padding: 0.8rem 1rem;
+            border-radius: var(--radius);
+            transition: background-color 0.2s ease, color 0.2s ease;
+            font-weight: 500;
+        }
+         .nav-sidebar .logout a .icon {
+            display: inline-block;
+            width: 20px; /* Ensure icons align */
+            text-align: center;
+            font-size: 1.1rem;
+        }
+
+        /* Make logout hover consistent with other links */
+        .nav-sidebar .logout a:hover {
+            background-color: var(--primary-light);
+            color: var(--primary);
+        }
+        /* --- END Nav Sidebar Styles --- */
+
+        /* --- Main Content Area Adjustment --- */
+        /* (Keep the rest of the CSS as it was in the previous response) */
+        .main-page-content {
+            flex-grow: 1; /* Takes remaining width */
+            margin-left: var(--sidebar-width); /* Offset by sidebar width */
+            padding: 2rem; /* Add padding around the main content */
+            width: calc(100% - var(--sidebar-width)); /* Ensure correct width calculation */
+            overflow-y: auto; /* Allow scrolling if content exceeds viewport height */
+            height: 100vh; /* Make it scrollable independently */
+        }
+        /* ... rest of your existing CSS ... */
+        /* --- END Nav Sidebar Styles --- */
+
+        /* --- Main Content Area Adjustment --- */
+        .main-page-content {
+            flex-grow: 1; /* Takes remaining width */
+            margin-left: var(--sidebar-width); /* Offset by sidebar width */
+            padding: 2rem; /* Add padding around the main content */
+            width: calc(100% - var(--sidebar-width)); /* Ensure correct width calculation */
+            overflow-y: auto; /* Allow scrolling if content exceeds viewport height */
+            height: 100vh; /* Make it scrollable independently */
+        }
+
+        /* Container within the main content area */
         .container {
             max-width: 1000px;
-            margin: 0 auto;
-            padding: 2rem;
+            margin: 0 auto; /* Center container within the main area */
+            /* Removed padding: 2rem; as it's now on main-page-content */
         }
-        
+
         .header {
             display: flex;
             justify-content: space-between;
@@ -48,7 +184,11 @@
             padding-bottom: 1rem;
             border-bottom: 1px solid #eee;
         }
-        
+         .header h1 { /* Style for the main heading */
+             font-size: 1.8rem;
+             color: var(--dark);
+         }
+
         .btn {
             display: inline-flex;
             align-items: center;
@@ -63,51 +203,67 @@
             cursor: pointer;
             transition: all 0.2s ease;
         }
-        
+
         .btn:hover {
             background-color: #3a56c5;
             transform: translateY(-2px);
             box-shadow: var(--shadow);
         }
-        
+
         .btn-outline {
             background-color: transparent;
             color: var(--primary);
             border: 1px solid var(--primary);
         }
-        
+
         .btn-outline:hover {
             background-color: var(--primary-light);
         }
-        
+
         .alert {
             padding: 1rem;
             border-radius: var(--radius);
             margin-bottom: 1.5rem;
+            display: flex; /* Align icon and text */
+            align-items: center;
+            gap: 0.75rem; /* Space between icon and text */
         }
-        
+        .alert i {
+            font-size: 1.2rem;
+        }
+
         .alert-success {
             background-color: #d4edda;
             color: #155724;
             border: 1px solid #c3e6cb;
         }
-        
+
         .alert-danger {
             background-color: #f8d7da;
             color: #721c24;
             border: 1px solid #f5c6cb;
         }
-        
+
         .main-content {
             display: grid;
-            grid-template-columns: 2fr 1fr;
+            grid-template-columns: 2fr 1fr; /* Existing layout for groups and forms */
             gap: 2rem;
         }
-        
+
+        .groups-container h2, .form-sidebar .card-title { /* Style section titles */
+             font-size: 1.4rem;
+             color: var(--dark);
+             margin-bottom: 1.5rem;
+             display: flex;
+             align-items: center;
+             gap: 0.5rem;
+        }
+
         .group-list {
             padding: 0;
+            list-style: none; /* Remove default list styling */
         }
-        
+
         .group-card {
             background-color: var(--white);
             border-radius: var(--radius);
@@ -118,12 +274,12 @@
             display: flex;
             align-items: center;
         }
-        
+
         .group-card:hover {
             transform: translateY(-2px);
             box-shadow: var(--shadow);
         }
-        
+
         .group-icon {
             width: 50px;
             height: 50px;
@@ -135,12 +291,13 @@
             justify-content: center;
             font-size: 1.5rem;
             margin-right: 1.25rem;
+            flex-shrink: 0; /* Prevent icon from shrinking */
         }
-        
+
         .group-info {
             flex-grow: 1;
         }
-        
+
         .group-name {
             font-size: 1.2rem;
             font-weight: bold;
@@ -149,39 +306,45 @@
             margin-bottom: 0.25rem;
             display: block;
         }
-        
+
         .group-name:hover {
             color: var(--primary);
         }
-        
-        .sidebar {
+
+        .group-meta {
+            font-size: 0.9rem;
+            color: var(--secondary);
+            display: flex;
+            align-items: center;
+            gap: 0.3rem;
+        }
+
+        /* Updated class name for the form sidebar */
+        .form-sidebar {
             display: flex;
             flex-direction: column;
             gap: 1.5rem;
         }
-        
+
         .card {
             background-color: var(--white);
             border-radius: var(--radius);
             padding: 1.5rem;
             box-shadow: var(--shadow);
         }
-        
+
         .card-header {
             margin-bottom: 1.25rem;
             border-bottom: 1px solid #eee;
             padding-bottom: 0.75rem;
         }
-        
-        .card-title {
-            font-size: 1.25rem;
-            margin-bottom: 0.5rem;
-        }
-        
+
+        /* .card-title adjusted above with groups-container h2 */
+
         .form-group {
             margin-bottom: 1rem;
         }
-        
+
         .form-control {
             width: 100%;
             padding: 0.75rem;
@@ -190,100 +353,151 @@
             font-size: 1rem;
             transition: border-color 0.2s;
         }
-        
+
         .form-control:focus {
             border-color: var(--primary);
             outline: none;
             box-shadow: 0 0 0 3px rgba(76, 110, 245, 0.1);
         }
-        
+
         .empty-state {
             text-align: center;
             padding: 3rem 1rem;
             color: var(--secondary);
+            background-color: var(--white); /* Give it a background */
+            border-radius: var(--radius);
+             box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
         }
-        
-        @media (max-width: 768px) {
+
+        @media (max-width: 992px) { /* Adjust breakpoint for sidebar */
             .main-content {
-                grid-template-columns: 1fr;
+                grid-template-columns: 1fr; /* Stack group list and forms */
             }
         }
+
+        @media (max-width: 768px) {
+             /* Example: Hide text and show only icons on smaller screens */
+             /* You might want a button to toggle the sidebar visibility instead */
+            .nav-sidebar {
+                width: 60px; /* Collapse sidebar */
+                 padding: 1.5rem 0.5rem;
+            }
+             .nav-sidebar .logo h2,
+             .nav-sidebar .nav-links a span:not(.icon), /* Hide text */
+             .nav-sidebar .logout a span:not(.icon) {
+                 display: none;
+             }
+             .nav-sidebar .nav-links a,
+             .nav-sidebar .logout a {
+                 justify-content: center; /* Center icon */
+                 padding: 0.8rem 0;
+             }
+             .nav-sidebar .logo {
+                  border-bottom: none;
+                  margin-bottom: 1.5rem;
+             }
+             .nav-sidebar .logout {
+                 border-top: none;
+                 padding-top: 0.5rem;
+             }
+
+             .main-page-content {
+                margin-left: 60px; /* Adjust margin for collapsed sidebar */
+                width: calc(100% - 60px);
+                padding: 1rem; /* Reduce padding */
+             }
+             .header h1 {
+                 font-size: 1.5rem;
+             }
+             .btn {
+                 padding: 0.4rem 0.8rem;
+                 font-size: 0.9rem;
+             }
+        }
+
     </style>
 </head>
 <body>
-    <div class="container">
-        <div class="header">
-            <h1>Study Groups</h1>
-            <a th:href="@{/dashboard}" class="btn btn-outline">
-                <i class="fas fa-arrow-left"></i> Back to Dashboard
-            </a>
-        </div>
 
-        <!-- Flash Messages -->
-        <div th:if="${successMessage}" class="alert alert-success">
-            <i class="fas fa-check-circle"></i> <span th:text="${successMessage}"></span>
+    <nav class="nav-sidebar">
+        <div class="logo">
+            <h2>Coding Tracker</h2>
         </div>
-        <div th:if="${errorMessage}" class="alert alert-danger">
-            <i class="fas fa-exclamation-circle"></i> <span th:text="${errorMessage}"></span>
+        <ul class="nav-links">
+            <li><a th:href="@{/dashboard}"><span class="icon">📊</span> Dashboard</a></li>
+            <li><a th:href="@{/progress}"><span class="icon">📝</span> Progress</a></li>
+            <li class="active"><a href="#"><span class="icon">👥</span> Study Groups</a></li> <li><a th:href="@{/jobs}"><span class="icon">🏢</span> Jobs</a></li>
+            <li><a th:href="@{/preferences}"><span class="icon">⚙️</span> Settings</a></li>
+            <li><a th:href="@{/notifications}"><span class="icon">🔔</span> Notifications</a></li>
+        </ul>
+        <div class="logout">
+            <a th:href="@{/logout}"><span class="icon">🚪</span> Logout</a>
         </div>
+    </nav>
 
-        <div class="main-content">
-            <div class="groups-container">
-                <h2><i class="fas fa-users"></i> Your Groups</h2>
-                
-                <div th:if="${groups.size() == 0}" class="empty-state">
-                    <i class="fas fa-user-friends" style="font-size: 3rem; margin-bottom: 1rem; color: #ccc;"></i>
-                    <p>You are not part of any groups yet.</p>
-                    <p>Create a new group or join an existing one.</p>
+    <div class="main-page-content">
+        <div class="container">
+            <div class="header">
+                <h1>Study Groups</h1>
                 </div>
 
-                <ul th:if="${groups.size() > 0}" class="group-list">
-                    <li th:each="group : ${groups}" class="group-card">
-                        <div class="group-icon">
-                            <i class="fas fa-users"></i>
-                        </div>
-                        <div class="group-info">
-                            <a th:href="@{/groups/{id}(id=${group.id})}" class="group-name" th:text="${group.name}">Group Name</a>
-                            <span class="group-meta">
-                                <i class="fas fa-users"></i> <span th:text="${group.members.size() + 1}">1</span> members
-                            </span>
-                        </div>
-                    </li>        
-                </ul>
+            <div th:if="${successMessage}" class="alert alert-success">
+                <i class="fas fa-check-circle"></i> <span th:text="${successMessage}"></span>
             </div>
-            
-            <div class="sidebar">
-                <!-- Create Group Form -->
-                <div class="card">
-                    <div class="card-header">
-                        <h3 class="card-title"><i class="fas fa-plus-circle"></i> Create New Group</h3>
+            <div th:if="${errorMessage}" class="alert alert-danger">
+                <i class="fas fa-exclamation-circle"></i> <span th:text="${errorMessage}"></span>
+            </div>
+
+            <div class="main-content">
+                <div class="groups-container">
+                    <h2><i class="fas fa-users"></i> Your Groups</h2>
+
+                    <div th:if="${groups == null || groups.size() == 0}" class="empty-state"> <i class="fas fa-user-friends" style="font-size: 3rem; margin-bottom: 1rem; color: #ccc;"></i>
+                        <p>You are not part of any groups yet.</p>
+                        <p>Create a new group or join an existing one using the forms.</p>
                     </div>
-                    <form th:action="@{/groups/create}" method="post" th:object="${groupDto}">
-                        <div class="form-group">
-                            <input type="text" class="form-control" th:field="*{name}" placeholder="New Group Name" required />
-                        </div>
-                        <button type="submit" class="btn" style="width: 100%">
-                            <i class="fas fa-plus"></i> Create Group
-                        </button>
-                    </form>
+
+                    <ul th:if="${groups != null && groups.size() > 0}" class="group-list"> <li th:each="group : ${groups}" class="group-card">
+                            <div class="group-icon">
+                                <i class="fas fa-users"></i>
+                            </div>
+                            <div class="group-info">
+                                <a th:href="@{/groups/{id}(id=${group.id})}" class="group-name" th:text="${group.name}">Group Name</a>
+                                <span class="group-meta">
+                                    <i class="fas fa-user-alt"></i> <span th:text="${group.members != null ? group.members.size() + 1 : 1}">1</span> members </span>
+                            </div>
+                        </li>
+                    </ul>
                 </div>
 
-                <!-- Join Group via Invitation Code -->
-                <div class="card">
-                    <div class="card-header">
-                        <h3 class="card-title"><i class="fas fa-ticket-alt"></i> Join a Group</h3>
-                    </div>
-                    <form th:action="@{/groups/join}" method="post">
-                        <div class="form-group">
-                            <input type="text" class="form-control" name="invitationCode" placeholder="Enter Invitation Code" required />
+                <div class="form-sidebar">
+                    <div class="card">
+                        <div class="card-header">
+                            <h3 class="card-title"><i class="fas fa-plus-circle"></i> Create New Group</h3>
                         </div>
-                        <button type="submit" class="btn" style="width: 100%">
-                            <i class="fas fa-sign-in-alt"></i> Join
-                        </button>
-                    </form>
+                        <form th:action="@{/groups/create}" method="post" th:object="${groupDto}">
+                            <div class="form-group">
+                                <input type="text" class="form-control" th:field="*{name}" placeholder="New Group Name" required />
+                            </div>
+                            <button type="submit" class="btn" style="width: 100%">
+                                <i class="fas fa-plus"></i> Create Group
+                            </button>
+                        </form>
+                    </div>
+
+                    <div class="card">
+                        <div class="card-header">
+                            <h3 class="card-title"><i class="fas fa-ticket-alt"></i> Join a Group</h3>
+                        </div>
+                        <form th:action="@{/groups/join}" method="post">
+                            <div class="form-group">
+                                <input type="text" class="form-control" name="invitationCode" placeholder="Enter Invitation Code" required />
+                            </div>
+                            <button type="submit" class="btn" style="width: 100%">
+                                <i class="fas fa-sign-in-alt"></i> Join
+                            </button>
+                        </form>
+                    </div>
                 </div>
-            </div>
-        </div>
-    </div>
-</body>
+            </div> </div> </div> </body>
 </html>
