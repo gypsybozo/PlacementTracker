@@ -23,7 +23,7 @@ public class EmailServiceImpl implements EmailService {
     public void sendVerificationEmail(User user, String token) {
         String recipientAddress = user.getEmail();
         String subject = "Registration Confirmation";
-        String confirmationUrl = verificationBaseUrl + "/verify?token=" + token;
+        String confirmationUrl = "https://placementtracker-g0m1.onrender.com/register/" + "/verify?token=" + token;
         
         SimpleMailMessage email = new SimpleMailMessage();
         email.setFrom(fromEmail);
