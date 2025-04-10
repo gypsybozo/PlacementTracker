@@ -34,7 +34,7 @@
         </div>
 
         <!-- ✅ Job Posting Form -->
-        <form th:action="@{/admin/jobs/save}" th:object="${job}" method="post" class="job-form">
+        <form th:action="@{/admin/jobs/manage}" th:object="${job}" method="post" class="job-form">
             <div class="form-group">
                 <label>Title:</label>
                 <input type="text" th:field="*{title}" required />
