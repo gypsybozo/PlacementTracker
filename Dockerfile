@@ -15,7 +15,7 @@ RUN chmod +x mvnw
 COPY src ./src
 
 # ✅ Copy the environment variables file for local development (optional)
-COPY .env .env
+# COPY .env .env
 
 # Build the application
 RUN ./mvnw clean install -DskipTests
