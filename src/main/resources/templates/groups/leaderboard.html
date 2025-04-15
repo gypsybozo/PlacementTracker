@@ -1,0 +1,495 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Group Leaderboard</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        :root {
+            --primary: #4c6ef5;
+            --primary-light: #e7ebff;
+            --secondary: #6c757d;
+            --success: #28a745;
+            --danger: #dc3545;
+            --light: #f8f9fa;
+            --dark: #343a40;
+            --white: #ffffff;
+            --shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            --radius: 8px;
+            --sidebar-width: 260px;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background-color: #f5f7fb;
+            color: #333;
+            line-height: 1.6;
+            padding: 0;
+            margin: 0;
+            display: flex;
+        }
+
+        /* Nav Sidebar Styles (same as in list.html) */
+        .nav-sidebar {
+            width: var(--sidebar-width);
+            height: 100vh;
+            background-color: var(--white);
+            color: var(--dark);
+            display: flex;
+            flex-direction: column;
+            padding: 1.5rem 1rem;
+            position: fixed;
+            left: 0;
+            top: 0;
+            overflow-y: auto;
+            z-index: 1000;
+            transition: width 0.3s ease;
+            border-right: 1px solid #eee;
+            box-shadow: var(--shadow);
+        }
+
+        .nav-sidebar .logo {
+            text-align: center;
+            margin-bottom: 2rem;
+            padding-bottom: 1rem;
+            border-bottom: 1px solid #eee;
+        }
+
+        .nav-sidebar .logo h2 {
+            color: var(--primary);
+            font-size: 1.8rem;
+            font-weight: 600;
+        }
+
+        .nav-sidebar .nav-links {
+            list-style: none;
+            flex-grow: 1;
+        }
+
+        .nav-sidebar .nav-links li {
+            margin-bottom: 0.5rem;
+        }
+
+        .nav-sidebar .nav-links a {
+            display: flex;
+            align-items: center;
+            gap: 0.8rem;
+            color: #333;
+            text-decoration: none;
+            padding: 0.8rem 1rem;
+            border-radius: var(--radius);
+            transition: background-color 0.2s ease, color 0.2s ease;
+            font-weight: 500;
+        }
+
+        .nav-sidebar .nav-links a:hover,
+        .nav-sidebar .nav-links li.active a {
+            background-color: var(--primary-light);
+            color: var(--primary);
+        }
+
+        .nav-sidebar .nav-links a .icon {
+            display: inline-block;
+            width: 20px;
+            text-align: center;
+            font-size: 1.1rem;
+        }
+
+        .nav-sidebar .logout {
+            margin-top: auto;
+            padding-top: 1rem;
+            border-top: 1px solid #eee;
+        }
+
+        .nav-sidebar .logout a {
+            display: flex;
+            align-items: center;
+            gap: 0.8rem;
+            color: #555;
+            text-decoration: none;
+            padding: 0.8rem 1rem;
+            border-radius: var(--radius);
+            transition: background-color 0.2s ease, color 0.2s ease;
+            font-weight: 500;
+        }
+
+        .nav-sidebar .logout a .icon {
+            display: inline-block;
+            width: 20px;
+            text-align: center;
+            font-size: 1.1rem;
+        }
+
+        .nav-sidebar .logout a:hover {
+            background-color: var(--primary-light);
+            color: var(--primary);
+        }
+
+        /* Main Content Area */
+        .main-page-content {
+            flex-grow: 1;
+            margin-left: var(--sidebar-width);
+            padding: 2rem;
+            width: calc(100% - var(--sidebar-width));
+            overflow-y: auto;
+            height: 100vh;
+        }
+
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+        }
+
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 2rem;
+            padding-bottom: 1rem;
+            border-bottom: 1px solid #eee;
+        }
+
+        .header h1 {
+            font-size: 1.8rem;
+            color: var(--dark);
+        }
+
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.5rem 1rem;
+            background-color: var(--primary);
+            color: white;
+            border: none;
+            border-radius: var(--radius);
+            text-decoration: none;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .btn:hover {
+            background-color: #3a56c5;
+            transform: translateY(-2px);
+            box-shadow: var(--shadow);
+        }
+
+        .btn-outline {
+            background-color: transparent;
+            color: var(--primary);
+            border: 1px solid var(--primary);
+        }
+
+        .btn-outline:hover {
+            background-color: var(--primary-light);
+        }
+
+        /* Leaderboard Styles */
+        .leaderboard-container {
+            background-color: var(--white);
+            border-radius: var(--radius);
+            box-shadow: var(--shadow);
+            margin-bottom: 2rem;
+            overflow: hidden;
+        }
+
+        .leaderboard-header {
+            background-color: var(--primary);
+            color: white;
+            padding: 1.5rem;
+            text-align: center;
+        }
+
+        .leaderboard-title {
+            font-size: 1.5rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .leaderboard-subtitle {
+            font-size: 0.9rem;
+            opacity: 0.9;
+        }
+
+        .leaderboard-table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        .leaderboard-table th,
+        .leaderboard-table td {
+            padding: 1rem;
+            text-align: left;
+            border-bottom: 1px solid #eee;
+        }
+
+        .leaderboard-table th {
+            background-color: #f8f9fa;
+            font-weight: 600;
+            color: var(--secondary);
+        }
+
+        .leaderboard-table td {
+            vertical-align: middle;
+        }
+
+        .leaderboard-table tr:last-child td {
+            border-bottom: none;
+        }
+
+        .leaderboard-table tr:hover {
+            background-color: var(--primary-light);
+        }
+
+        /* Highlight current user */
+        .leaderboard-table tr.current-user {
+            background-color: #fff8e1;
+        }
+
+        .leaderboard-table tr.current-user:hover {
+            background-color: #fff3cd;
+        }
+
+        .rank {
+            font-weight: bold;
+            width: 50px;
+            text-align: center;
+        }
+
+        .medal {
+            font-size: 1.5rem;
+            width: 50px;
+            text-align: center;
+        }
+
+        .difficulty-badge {
+            display: inline-block;
+            padding: 0.25rem 0.5rem;
+            border-radius: 1rem;
+            font-size: 0.8rem;
+            margin-right: 0.25rem;
+        }
+
+        .badge-easy {
+            background-color: #d4edda;
+            color: #155724;
+        }
+
+        .badge-medium {
+            background-color: #fff3cd;
+            color: #856404;
+        }
+
+        .badge-hard {
+            background-color: #f8d7da;
+            color: #721c24;
+        }
+
+        .username {
+            font-weight: 500;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .avatar {
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            background-color: var(--primary-light);
+            color: var(--primary);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+        }
+
+        .legend {
+            background-color: var(--white);
+            border-radius: var(--radius);
+            box-shadow: var(--shadow);
+            padding: 1.5rem;
+            margin-bottom: 2rem;
+        }
+
+        .legend-title {
+            font-size: 1.1rem;
+            margin-bottom: 1rem;
+            font-weight: 600;
+        }
+
+        .legend-item {
+            display: flex;
+            align-items: center;
+            margin-bottom: 0.5rem;
+        }
+
+        .legend-color {
+            width: 16px;
+            height: 16px;
+            border-radius: 4px;
+            margin-right: 0.5rem;
+        }
+
+        .empty-state {
+            text-align: center;
+            padding: 3rem 1rem;
+            color: var(--secondary);
+        }
+
+        @media (max-width: 992px) {
+            .leaderboard-table .difficulty-col {
+                display: none;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .nav-sidebar {
+                width: 60px;
+                padding: 1.5rem 0.5rem;
+            }
+            .nav-sidebar .logo h2,
+            .nav-sidebar .nav-links a span:not(.icon),
+            .nav-sidebar .logout a span:not(.icon) {
+                display: none;
+            }
+            .nav-sidebar .nav-links a,
+            .nav-sidebar .logout a {
+                justify-content: center;
+                padding: 0.8rem 0;
+            }
+            .nav-sidebar .logo {
+                border-bottom: none;
+                margin-bottom: 1.5rem;
+            }
+            .nav-sidebar .logout {
+                border-top: none;
+                padding-top: 0.5rem;
+            }
+
+            .main-page-content {
+                margin-left: 60px;
+                width: calc(100% - 60px);
+                padding: 1rem;
+            }
+            .header h1 {
+                font-size: 1.5rem;
+            }
+            .btn {
+                padding: 0.4rem 0.8rem;
+                font-size: 0.9rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <nav class="nav-sidebar">
+        <div class="logo">
+            <h2>Coding Tracker</h2>
+        </div>
+        <ul class="nav-links">
+            <li><a th:href="@{/dashboard}"><span class="icon">📊</span> Dashboard</a></li>
+            <li><a th:href="@{/progress}"><span class="icon">📝</span> Progress</a></li>
+            <li class="active"><a th:href="@{/groups}"><span class="icon">👥</span> Study Groups</a></li>
+            <li><a th:href="@{/jobs}"><span class="icon">🏢</span> Jobs</a></li>
+            <li><a th:href="@{/preferences}"><span class="icon">⚙️</span> Settings</a></li>
+            <li><a th:href="@{/notifications}"><span class="icon">🔔</span> Notifications</a></li>
+        </ul>
+        <div class="logout">
+            <a th:href="@{/logout}"><span class="icon">🚪</span> Logout</a>
+        </div>
+    </nav>
+
+    <div class="main-page-content">
+        <div class="container">
+            <div class="header">
+                <h1>
+                    <i class="fas fa-trophy"></i> 
+                    Group Leaderboard: <span th:text="${group.name}">Group Name</span>
+                </h1>
+                <a th:href="@{/groups/{id}(id=${group.id})}" class="btn btn-outline">
+                    <i class="fas fa-arrow-left"></i> Back to Group
+                </a>
+            </div>
+
+            <div class="legend">
+                <h3 class="legend-title"><i class="fas fa-info-circle"></i> How Ranking Works</h3>
+                <p>Users are ranked by the total number of problems solved. In case of a tie, ranking is determined by difficulty points.</p>
+                <p style="margin-top: 0.5rem; margin-bottom: 1rem;">Difficulty points are calculated as: Easy (1 point), Medium (2 points), Hard (3 points)</p>
+                
+                <div class="legend-item">
+                    <div class="legend-color" style="background-color: #d4edda;"></div>
+                    <span>Easy</span>
+                </div>
+                <div class="legend-item">
+                    <div class="legend-color" style="background-color: #fff3cd;"></div>
+                    <span>Medium</span>
+                </div>
+                <div class="legend-item">
+                    <div class="legend-color" style="background-color: #f8d7da;"></div>
+                    <span>Hard</span>
+                </div>
+            </div>
+
+            <div class="leaderboard-container">
+                <div class="leaderboard-header">
+                    <h2 class="leaderboard-title">Leaderboard Rankings</h2>
+                    <p class="leaderboard-subtitle">Keep solving to improve your rank!</p>
+                </div>
+
+                <div th:if="${leaderboard == null || leaderboard.size() == 0}" class="empty-state">
+                    <i class="fas fa-chart-bar" style="font-size: 3rem; margin-bottom: 1rem; color: #ccc;"></i>
+                    <p>No data available for the leaderboard.</p>
+                    <p>Start solving problems to appear on the leaderboard!</p>
+                </div>
+
+                <table th:if="${leaderboard != null && leaderboard.size() > 0}" class="leaderboard-table">
+                    <thead>
+                        <tr>
+                            <th>Rank</th>
+                            <th>User</th>
+                            <th>Problems Solved</th>
+                            <th class="difficulty-col">Difficulty Breakdown</th>
+                            <th>Points</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr th:each="entry : ${leaderboard}" th:class="${entry.userId == currentUser.id ? 'current-user' : ''}">
+                            <td class="rank">
+                                <span th:if="${entry.rank == 1}" class="medal">🥇</span>
+                                <span th:if="${entry.rank == 2}" class="medal">🥈</span>
+                                <span th:if="${entry.rank == 3}" class="medal">🥉</span>
+                                <span th:if="${entry.rank > 3}" th:text="${entry.rank}">4</span>
+                            </td>
+                            <td class="username">
+                                <div class="avatar" th:text="${#strings.substring(entry.username,0,1).toUpperCase()}">U</div>
+                                <span th:text="${entry.username}">Username</span>
+                            </td>
+                            <td th:text="${entry.totalSolved}">42</td>
+                            <td class="difficulty-col">
+                                <span th:if="${entry.easyCount > 0}" class="difficulty-badge badge-easy">
+                                    <span th:text="${entry.easyCount}">10</span> Easy
+                                </span>
+                                <span th:if="${entry.mediumCount > 0}" class="difficulty-badge badge-medium">
+                                    <span th:text="${entry.mediumCount}">20</span> Medium
+                                </span>
+                                <span th:if="${entry.hardCount > 0}" class="difficulty-badge badge-hard">
+                                    <span th:text="${entry.hardCount}">12</span> Hard
+                                </span>
+                            </td>
+                            <td th:text="${entry.difficultyPoints}">86</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

@@ -28,4 +28,10 @@ public interface UserProgressRepository extends JpaRepository<UserProgress, Long
     long countDistinctActiveDaysBetween(User user, LocalDateTime startDate, LocalDateTime endDate);
     
     long countByUserAndCompletedAtBetween(User user, LocalDateTime start, LocalDateTime end);
+
+    @Query("SELECT up FROM UserProgress up WHERE up.user.id IN :userIds")
+    List<UserProgress> findByUserIdIn(List<Long> userIds);
+    
+    @Query("SELECT up FROM UserProgress up JOIN up.problem p WHERE up.user.id = :userId")
+    List<UserProgress> findByUserId(Long userId);
 }

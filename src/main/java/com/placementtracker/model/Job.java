@@ -6,6 +6,10 @@ import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotEmpty;
+
+import org.springframework.format.annotation.DateTimeFormat;
+
+
 import java.time.LocalDateTime;
 import java.util.HashSet;
 import java.util.Set;
@@ -45,6 +49,7 @@ public class Job {
     private LocalDateTime postedDate;
 
     @Column(name = "application_deadline")
+    @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME)
     private LocalDateTime applicationDeadline;
 
     @Column(name = "salary_range")

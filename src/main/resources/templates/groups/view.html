@@ -25,7 +25,100 @@
             box-sizing: border-box;
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
         }
-        
+        .nav-sidebar {
+            width: var(--sidebar-width);
+            height: 100vh;
+            background-color: var(--white);
+            color: var(--dark);
+            display: flex;
+            flex-direction: column;
+            padding: 1.5rem 1rem;
+            position: fixed;
+            left: 0;
+            top: 0;
+            overflow-y: auto;
+            z-index: 1000;
+            transition: width 0.3s ease;
+            border-right: 1px solid #eee;
+            box-shadow: var(--shadow);
+        }
+
+        .nav-sidebar .logo {
+            text-align: center;
+            margin-bottom: 2rem;
+            padding-bottom: 1rem;
+            border-bottom: 1px solid #eee;
+        }
+
+        .nav-sidebar .logo h2 {
+            color: var(--primary);
+            font-size: 1.8rem;
+            font-weight: 600;
+        }
+
+        .nav-sidebar .nav-links {
+            list-style: none;
+            flex-grow: 1;
+        }
+
+        .nav-sidebar .nav-links li {
+            margin-bottom: 0.5rem;
+        }
+
+        .nav-sidebar .nav-links a {
+            display: flex;
+            align-items: center;
+            gap: 0.8rem;
+            color: #333;
+            text-decoration: none;
+            padding: 0.8rem 1rem;
+            border-radius: var(--radius);
+            transition: background-color 0.2s ease, color 0.2s ease;
+            font-weight: 500;
+        }
+
+        .nav-sidebar .nav-links a:hover,
+        .nav-sidebar .nav-links li.active a {
+            background-color: var(--primary-light);
+            color: var(--primary);
+        }
+
+        .nav-sidebar .nav-links a .icon {
+            display: inline-block;
+            width: 20px;
+            text-align: center;
+            font-size: 1.1rem;
+        }
+
+        .nav-sidebar .logout {
+            margin-top: auto;
+            padding-top: 1rem;
+            border-top: 1px solid #eee;
+        }
+
+        .nav-sidebar .logout a {
+            display: flex;
+            align-items: center;
+            gap: 0.8rem;
+            color: #555;
+            text-decoration: none;
+            padding: 0.8rem 1rem;
+            border-radius: var(--radius);
+            transition: background-color 0.2s ease, color 0.2s ease;
+            font-weight: 500;
+        }
+
+        .nav-sidebar .logout a .icon {
+            display: inline-block;
+            width: 20px;
+            text-align: center;
+            font-size: 1.1rem;
+        }
+
+        .nav-sidebar .logout a:hover {
+            background-color: var(--primary-light);
+            color: var(--primary);
+        }
         body {
             background-color: #f5f7fb;
             color: #333;
@@ -35,6 +128,8 @@
         }
         
         .container {
+            display: grid;
+            justify-content: end;
             max-width: 1000px;
             margin: 0 auto;
             padding: 2rem;
@@ -265,6 +360,22 @@
     </script>
 </head>
 <body>
+    <nav class="nav-sidebar">
+        <div class="logo">
+            <h2>Coding Tracker</h2>
+        </div>
+        <ul class="nav-links">
+            <li><a th:href="@{/dashboard}"><span class="icon">📊</span> Dashboard</a></li>
+            <li><a th:href="@{/progress}"><span class="icon">📝</span> Progress</a></li>
+            <li class="active"><a th:href="@{/groups}"><span class="icon">👥</span> Study Groups</a></li>
+            <li><a th:href="@{/jobs}"><span class="icon">🏢</span> Jobs</a></li>
+            <li><a th:href="@{/preferences}"><span class="icon">⚙️</span> Settings</a></li>
+            <li><a th:href="@{/notifications}"><span class="icon">🔔</span> Notifications</a></li>
+        </ul>
+        <div class="logout">
+            <a th:href="@{/logout}"><span class="icon">🚪</span> Logout</a>
+        </div>
+    </nav>
     <div class="container">
         <div class="header">
             <h1>Group Details</h1>
@@ -311,6 +422,30 @@
                     <div th:each="member : ${group.members}" class="member-item">
                         <div class="avatar" th:text="${#strings.substring(member.username,0,1).toUpperCase()}">M</div>
                         <div th:text="${member.username}">Member Username</div>
+                    </div>
+                    <div class="group-details">
+                        <h2 class="group-name">
+                            <i class="fas fa-users"></i>
+                            <span th:text="${group.name}">Group Name</span>
+                        </h2>
+                        
+                        <p class="group-description" th:text="${group.description ?: 'No description available.'}">
+                            This is the group description. It provides details about the group's purpose, goals, and activities.
+                        </p>
+                        
+                        <div class="group-meta">
+                            <i class="fas fa-user-shield"></i> Created by: 
+                            <strong th:text="${group.creator.username}">Creator Name</strong>
+                        </div>
+                        
+                        <div style="display: flex; gap: 0.5rem;">
+                            <a th:href="@{/groups/{id}/discussions(id=${group.id})}" class="btn">
+                                <i class="fas fa-comments"></i> Go to Discussions
+                            </a>
+                            <a th:href="@{/groups/{id}/leaderboard(id=${group.id})}" class="btn">
+                                <i class="fas fa-trophy"></i> Leaderboard
+                            </a>
+                        </div>
                     </div>
                 </div>
             </div>

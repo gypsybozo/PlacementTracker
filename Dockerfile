@@ -14,7 +14,8 @@ RUN chmod +x mvnw
 # Copy the source code
 COPY src ./src
 
-# 🔥 Removed .env COPY — handled by Render env vars
+# ✅ Copy the environment variables file for local development (optional)
+COPY .env .env
 
 # Build the application
 RUN ./mvnw clean install -DskipTests
