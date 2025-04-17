@@ -123,52 +123,146 @@ UPDATE users_roles SET role = 'ROLE_ADMIN' WHERE user_id = 1;
 ## 📁 Project Structure
 
 ```text
-coding-tracker/
-├── src/
-│   ├── main/
-│   │   ├── java/
-│   │   │   └── com/
-│   │   │       └── placementtracker/
-│   │   │           ├── PlacementTrackerApplication.java
-│   │   │           ├── config/
-│   │   │           │   ├── SecurityConfig.java
-│   │   │           │   └── EmailConfig.java
-│   │   │           ├── controller/
-│   │   │           │   ├── AuthController.java
-│   │   │           │   └── RegistrationController.java
-│   │   │           ├── model/
-│   │   │           │   ├── User.java
-│   │   │           │   └── VerificationToken.java
-│   │   │           ├── repository/
-│   │   │           │   ├── UserRepository.java
-│   │   │           │   └── VerificationTokenRepository.java
-│   │   │           ├── service/
-│   │   │           │   ├── UserService.java
-│   │   │           │   ├── UserServiceImpl.java
-│   │   │           │   ├── EmailService.java
-│   │   │           │   └── EmailServiceImpl.java
-│   │   │           └── dto/
-│   │   │               ├── UserRegistrationDto.java
-│   │   │               └── LoginDto.java
-│   │   └── resources/
-│   │       ├── application.properties
-│   │       ├── static/
-│   │       │   ├── css/
-│   │       │   │   └── styles.css
-│   │       │   └── js/
-│   │       │       └── scripts.js
-│   │       └── templates/
-│   │           ├── login.html
-│   │           ├── register.html
-│   │           ├── verification-success.html
-│   │           └── verification-failure.html
-│   └── test/
-│       └── java/
-│           └── com/
-│               └── placementtracker/
-│                   └── auth/
-│                       ├── UserServiceTest.java
-│                       └── AuthControllerTest.java
-├── pom.xml
-└── README.md
-
+.
+├── Dockerfile                      # Configuration to build a Docker container for your app (good for deployment)
+├── README.md                       # Project documentation (you'll fill this based on my help later)
+├── mvnw                            # Maven Wrapper script for Linux/macOS (runs Maven without installing it globally)
+├── mvnw.cmd                        # Maven Wrapper script for Windows
+├── noisy-frost-99267714_schema_only.sql # Seems like a database schema export, possibly from a tool.
+├── pom.xml                         # Maven Project Object Model: Defines dependencies, plugins, build settings. Crucial.
+├── schema_only.sql                 # A cleaner database schema file, likely the one you intend to use.
+└── src                             # Source code directory
+    ├── main                        # Main application code and resources
+    │   ├── java                    # Java source code root
+    │   │   └── com
+    │   │       └── placementtracker  # Your application's base package
+    │   │           ├── PlacementTrackerApplication.java # Main class to run the Spring Boot app (@SpringBootApplication)
+    │   │           │
+    │   │           ├── config        # Configuration classes for Spring Security, Email, etc.
+    │   │           │   ├── AdminInitializer.java         # Likely runs on startup to ensure an admin user exists.
+    │   │           │   ├── CustomAuthenticationSuccessHandler.java # Custom logic after successful login (e.g., redirect based on role).
+    │   │           │   ├── EmailConfig.java            # Configuration for sending emails (SMTP server, etc.).
+    │   │           │   └── SecurityConfig.java         # Core security setup: login forms, URL access rules, password encoding.
+    │   │           │
+    │   │           ├── controller    # --- MVC: Controllers --- Handles incoming web requests, interacts with Services, returns Views/Data.
+    │   │           │   ├── AdminController.java        # Handles requests for the '/admin/**' paths.
+    │   │           │   ├── AuthController.java         # Handles login, logout requests.
+    │   │           │   ├── DashboardController.java    # Handles the main user dashboard view.
+    │   │           │   ├── GlobalUserControllerAdvice.java # (@ControllerAdvice) Adds common data (like logged-in user) to the model for multiple controllers.
+    │   │           │   ├── GroupDiscussionController.java # Handles requests related to group discussions.
+    │   │           │   ├── JobController.java          # Handles requests for viewing/managing jobs (likely admin-focused).
+    │   │           │   ├── JobPreferenceController.java # Handles user requests for setting job preferences.
+    │   │           │   ├── LeaderboardController.java  # Handles requests for viewing leaderboards.
+    │   │           │   ├── NotificationController.java # Handles requests related to user notifications.
+    │   │           │   ├── NotificationControllerAdvice.java # (@ControllerAdvice) Adds notification counts or data to models globally.
+    │   │           │   ├── ProgressController.java     # Handles requests for adding/viewing coding progress.
+    │   │           │   ├── RedirectController.java     # Handles simple redirects (e.g., root '/' to '/login' or '/dashboard').
+    │   │           │   ├── RegistrationController.java # Handles user registration requests.
+    │   │           │   └── StudyGroupController.java   # Handles requests for creating/joining/managing study groups.
+    │   │           │
+    │   │           ├── dto           # --- Data Transfer Objects --- Plain objects to carry data between layers (e.g., Controller <-> Service, or data from forms). Prevents exposing internal Models directly.
+    │   │           │   ├── DiscussionCommentDto.java
+    │   │           │   ├── GroupDiscussionDto.java
+    │   │           │   ├── JobDto.java
+    │   │           │   ├── JobPreferenceDto.java
+    │   │           │   ├── LeaderboardEntryDto.java    # DTO specifically for leaderboard display
+    │   │           │   ├── LoginDto.java               # DTO for login form data
+    │   │           │   ├── ProblemDto.java
+    │   │           │   ├── StudyGroupDto.java
+    │   │           │   ├── UserProgressDto.java
+    │   │           │   └── UserRegistrationDto.java    # DTO for registration form data
+    │   │           │
+    │   │           ├── model         # --- MVC: Model (Entities) --- Java classes representing data structures (usually mapped to database tables using JPA @Entity).
+    │   │           │   ├── DiscussionComment.java
+    │   │           │   ├── GroupDiscussion.java
+    │   │           │   ├── Job.java
+    │   │           │   ├── JobPreference.java
+    │   │           │   ├── Notification.java
+    │   │           │   ├── Problem.java
+    │   │           │   ├── StudyGroup.java
+    │   │           │   ├── User.java                   # Represents the application user.
+    │   │           │   ├── UserProgress.java
+    │   │           │   └── VerificationToken.java      # Used for email verification process.
+    │   │           │
+    │   │           ├── repository    # --- Data Access Layer --- Interfaces (extending Spring Data JPA's JpaRepository) defining methods to interact with the database for each Model/Entity.
+    │   │           │   ├── DiscussionCommentRepository.java
+    │   │           │   ├── GroupDiscussionRepository.java
+    │   │           │   ├── GroupLeaderboardRepository.java # Potentially a custom repository for complex leaderboard queries.
+    │   │           │   ├── JobPreferenceRepository.java
+    │   │           │   ├── JobRepository.java
+    │   │           │   ├── NotificationRepository.java
+    │   │           │   ├── ProblemRepository.java
+    │   │           │   ├── StudyGroupRepository.java
+    │   │           │   ├── UserProgressRepository.java
+    │   │           │   ├── UserRepository.java
+    │   │           │   └── VerificationTokenRepository.java
+    │   │           │
+    │   │           └── service       # --- Business Logic Layer --- Contains the core application logic. Services coordinate Repositories and perform operations. Often uses Interfaces and Implementations.
+    │   │               ├── CustomUserDetailsService.java # Implements Spring Security's UserDetailsService to load user data for authentication.
+    │   │               ├── EmailService.java           # Interface for email sending operations.
+    │   │               ├── EmailServiceImpl.java       # Implementation of EmailService.
+    │   │               ├── GroupDiscussionService.java / GroupDiscussionServiceImpl.java # Handles logic for discussions.
+    │   │               ├── GroupLeaderboardService.java # Handles logic for calculating/fetching leaderboard data.
+    │   │               ├── JobNotificationScheduler.java # (@Scheduled) Likely runs periodically to check for job matches and send notifications.
+    │   │               ├── JobPreferenceService.java / JobPreferenceServiceImpl.java # Handles logic for job preferences.
+    │   │               ├── JobService.java / JobServiceImpl.java # Handles logic for jobs (CRUD, fetching).
+    │   │               ├── NotificationService.java / NotificationServiceImpl.java # Handles logic for notifications.
+    │   │               ├── ProblemService.java / ProblemServiceImpl.java # Handles logic for problems.
+    │   │               ├── ProgressService.java / ProgressServiceImpl.java # Handles logic for progress tracking.
+    │   │               ├── StudyGroupService.java / StudyGroupServiceImpl.java # Handles logic for study groups.
+    │   │               ├── UserService.java            # Interface for user-related operations (registration, profile updates).
+    │   │               └── UserServiceImpl.java        # Implementation of UserService.
+    │   │
+    │   └── resources               # Non-Java files (configuration, static assets, templates)
+    │       ├── application.properties  # Spring Boot configuration file (database URL, server port, email settings, etc.).
+    │       ├── static                  # --- Static Web Content --- Files served directly (CSS, JavaScript, images).
+    │       │   ├── css
+    │       │   │   ├── admin.css
+    │       │   │   └── styles.css
+    │       │   └── js
+    │       │       └── scripts.js
+    │       └── templates               # --- MVC: Views --- Server-side templates (likely Thymeleaf given .html) processed to generate dynamic HTML.
+    │           ├── admin               # Templates specific to the admin panel
+    │           │   ├── dashboard.html
+    │           │   ├── jobs            # Admin job management templates
+    │           │   │   ├── edit.html
+    │           │   │   ├── list.html
+    │           │   │   └── manage.html
+    │           │   ├── notifications   # Admin notification templates
+    │           │   │   ├── dashboard.html
+    │           │   │   └── send.html
+    │           │   └── users           # Admin user management templates
+    │           │       ├── list.html
+    │           │       └── view.html
+    │           ├── dashboard.html      # Main user dashboard template
+    │           ├── groups              # Templates for study groups feature
+    │           │   ├── discussion-detail.html
+    │           │   ├── discussions.html
+    │           │   ├── edit.html
+    │           │   ├── invite.html
+    │           │   ├── leaderboard.html
+    │           │   ├── list.html
+    │           │   └── view.html
+    │           ├── jobs                # Templates for user viewing jobs
+    │           │   ├── list.html
+    │           │   └── view.html
+    │           ├── login.html          # Login page template
+    │           ├── notifications       # Templates for user notifications
+    │           │   └── list.html
+    │           ├── preferences         # Templates for user job preferences
+    │           │   └── edit.html
+    │           ├── progress            # Templates for progress tracking feature
+    │           │   ├── add.html
+    │           │   └── list.html
+    │           ├── register-success.html # Page shown after successful registration.
+    │           ├── register.html       # Registration page template.
+    │           ├── verification-failure.html # Page shown if email verification fails.
+    │           └── verification-success.html # Page shown after successful email verification.
+    │
+    └── test                        # Test code
+        └── java
+            └── com
+                └── placementtracker
+                    └── auth            # Example test package
+                        ├── AuthControllerTest.java # Unit/Integration tests for AuthController.
+                        └── UserServiceTest.java    # Unit/Integration tests for UserService.
