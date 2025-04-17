@@ -73,7 +73,7 @@
                             </td>
                             <td>
                                 <span th:each="role : ${user.roles}" class="role-badge" 
-                                      th:text="${role.substring(5)}">ROLE</span>
+                                th:text="${#strings.length(role) > 5 ? role.substring(5) : role}">ROLE</span>
                             </td>
                             <td th:text="${#temporals.format(user.createdAt, 'dd MMM yyyy')}">01 Jan 2025</td>
                             <td th:text="${user.lastLogin != null ? #temporals.format(user.lastLogin, 'dd MMM yyyy') : 'Never'}">01 Jan 2025</td>

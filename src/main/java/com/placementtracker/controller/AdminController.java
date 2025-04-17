@@ -117,12 +117,13 @@ public class AdminController {
     
     @PostMapping("/jobs/save")
     public String saveJob(@ModelAttribute Job job, RedirectAttributes redirectAttributes) {
+        job.setId(null);  // 🔐 Force Hibernate to treat this as a new entity
         job.setPostedDate(LocalDateTime.now());
         jobRepository.save(job);
-
         redirectAttributes.addFlashAttribute("successMessage", "Job posted successfully!");
-        return "redirect:/admin/jobs/manage";  // 👈 redirect back to the form
+        return "redirect:/admin/jobs/manage";
     }
+
 
 
 }
